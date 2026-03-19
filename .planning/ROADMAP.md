@@ -12,7 +12,7 @@ DX.Blame delivers inline Git blame annotations in the Delphi IDE, progressing fr
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Package Foundation** - Installable BPL with stable OTA lifecycle and clean unload
+- [x] **Phase 1: Package Foundation** - Installable BPL with stable OTA lifecycle and clean unload (completed 2026-03-19)
 - [ ] **Phase 2: Blame Data Pipeline** - Async git blame execution, parsing, and thread-safe caching
 - [ ] **Phase 3: Inline Rendering and UX** - Visible blame annotations with toggle, navigation, and configuration
 - [ ] **Phase 4: Tooltip and Commit Detail** - Hover tooltip with full commit info and diff detail view
@@ -82,7 +82,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Package Foundation | 0/2 | Planning complete | - |
+| 1. Package Foundation | 2/2 | Complete   | 2026-03-19 |
 | 2. Blame Data Pipeline | 0/? | Not started | - |
 | 3. Inline Rendering and UX | 0/? | Not started | - |
 | 4. Tooltip and Commit Detail | 0/? | Not started | - |
