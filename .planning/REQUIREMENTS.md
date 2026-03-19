@@ -23,8 +23,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Konfiguration
 
-- [ ] **CONF-01**: User kann das Anzeige-Format konfigurieren (Autor ein/aus, Datumsformat relativ/absolut, Max-Länge)
-- [ ] **CONF-02**: User kann die Blame-Textfarbe konfigurieren oder sie wird automatisch aus dem IDE-Theme abgeleitet
+- [x] **CONF-01**: User kann das Anzeige-Format konfigurieren (Autor ein/aus, Datumsformat relativ/absolut, Max-Länge)
+- [x] **CONF-02**: User kann die Blame-Textfarbe konfigurieren oder sie wird automatisch aus dem IDE-Theme abgeleitet
 
 ### UX & Integration
 
@@ -67,8 +67,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BLAME-06 | Phase 2 | Complete |
 | TTIP-01 | Phase 4 | Pending |
 | TTIP-02 | Phase 4 | Pending |
-| CONF-01 | Phase 3 | Pending |
-| CONF-02 | Phase 3 | Pending |
+| CONF-01 | Phase 3 | Complete |
+| CONF-02 | Phase 3 | Complete |
 | UX-01 | Phase 3 | Pending |
 | UX-02 | Phase 3 | Pending |
 | UX-03 | Phase 3 | Pending |

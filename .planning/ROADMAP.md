@@ -63,7 +63,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Settings persistence (INI) and annotation formatter with unit tests
+- [x] 03-01-PLAN.md — Settings persistence (INI) and annotation formatter with unit tests
 - [ ] 03-02-PLAN.md — Editor renderer (INTACodeEditorEvents), menu toggle, and keyboard shortcut
 - [ ] 03-03-PLAN.md — Settings configuration dialog and parent revision navigation
 
@@ -87,6 +87,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Package Foundation | 2/2 | Complete   | 2026-03-19 |
-| 2. Blame Data Pipeline | 0/3 | Not started | - |
-| 3. Inline Rendering and UX | 0/3 | Not started | - |
+| 2. Blame Data Pipeline | 3/3 | Complete | 2026-03-19 |
+| 3. Inline Rendering and UX | 1/3 | In progress | - |
 | 4. Tooltip and Commit Detail | 0/? | Not started | - |
