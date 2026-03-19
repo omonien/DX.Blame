@@ -39,6 +39,7 @@ requires
 contains
   DX.Blame.Registration in 'DX.Blame.Registration.pas',
   DX.Blame.Version in 'DX.Blame.Version.pas',
-  DX.Blame.Git.Types in 'DX.Blame.Git.Types.pas';
+  DX.Blame.Git.Types in 'DX.Blame.Git.Types.pas',
+  DX.Blame.Git.Discovery in 'DX.Blame.Git.Discovery.pas';
 
 end.
