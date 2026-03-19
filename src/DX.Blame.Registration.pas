@@ -29,7 +29,9 @@ uses
   System.Classes,
   Vcl.Menus,
   Winapi.Windows,
-  DX.Blame.Version;
+  DX.Blame.Version,
+  DX.Blame.IDE.Notifier,
+  DX.Blame.Engine;
 
 var
   GWizardIndex: Integer = -1;
@@ -140,6 +142,8 @@ var
   LWizardServices: IOTAWizardServices;
   LAboutBoxServices: IOTAAboutBoxServices;
   LAboutBmp: HBITMAP;
+  LModuleServices: IOTAModuleServices;
+  LProject: IOTAProject;
 begin
   // Register wizard
   if Supports(BorlandIDEServices, IOTAWizardServices, LWizardServices) then
@@ -161,6 +165,17 @@ begin
 
   // Create Tools menu placeholder
   CreateToolsMenu;
+
+  // Register IDE notifiers for file open/close/save events
+  RegisterIDENotifiers;
+
+  // Initialize blame engine with current project path
+  if Supports(BorlandIDEServices, IOTAModuleServices, LModuleServices) then
+  begin
+    LProject := LModuleServices.GetActiveProject;
+    if LProject <> nil then
+      BlameEngine.Initialize(ExtractFileDir(LProject.FileName));
+  end;
 end;
 
 initialization
@@ -179,17 +194,22 @@ initialization
 
 finalization
   // Reverse-order cleanup to prevent access violations on BPL unload:
-  // 1. Remove UI elements (menu items) first
+  // 1. Remove IDE notifiers first (notifiers must stop before UI cleanup)
+  UnregisterIDENotifiers;
+
+  // 2. Remove UI elements (menu items)
   RemoveToolsMenu;
 
-  // 2. Remove wizard registration
+  // 3. Remove wizard registration
   if GWizardIndex >= 0 then
     if Assigned(BorlandIDEServices) then
       (BorlandIDEServices as IOTAWizardServices).RemoveWizard(GWizardIndex);
 
-  // 3. Remove about box entry last
+  // 4. Remove about box entry last
   if GAboutPluginIndex >= 0 then
     if Assigned(BorlandIDEServices) then
       (BorlandIDEServices as IOTAAboutBoxServices).RemovePluginInfo(GAboutPluginIndex);
+
+  // BlameEngine singleton is freed in DX.Blame.Engine finalization
 
 end.

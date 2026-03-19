@@ -37,13 +37,14 @@ requires
   designide;
 
 contains
-  DX.Blame.Registration in 'DX.Blame.Registration.pas',
   DX.Blame.Version in 'DX.Blame.Version.pas',
   DX.Blame.Git.Types in 'DX.Blame.Git.Types.pas',
   DX.Blame.Git.Discovery in 'DX.Blame.Git.Discovery.pas',
   DX.Blame.Git.Process in 'DX.Blame.Git.Process.pas',
   DX.Blame.Git.Blame in 'DX.Blame.Git.Blame.pas',
   DX.Blame.Cache in 'DX.Blame.Cache.pas',
-  DX.Blame.Engine in 'DX.Blame.Engine.pas';
+  DX.Blame.Engine in 'DX.Blame.Engine.pas',
+  DX.Blame.IDE.Notifier in 'DX.Blame.IDE.Notifier.pas',
+  DX.Blame.Registration in 'DX.Blame.Registration.pas';
 
 end.
