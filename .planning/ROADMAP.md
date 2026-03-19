@@ -31,8 +31,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Project scaffold, build infrastructure, and OTA registration implementation
-- [ ] 01-02-PLAN.md — DUnitX tests and IDE integration verification
+- [x] 01-01-PLAN.md — Project scaffold, build infrastructure, and OTA registration implementation
+- [x] 01-02-PLAN.md — DUnitX tests and IDE integration verification
 
 ### Phase 2: Blame Data Pipeline
 **Goal**: The plugin detects git repos, executes git blame asynchronously, parses porcelain output, and stores results in a thread-safe per-file cache
@@ -44,10 +44,12 @@ Plans:
   3. Blame results (author, date, commit hash, message) are correctly parsed from git blame --porcelain output and stored per line
   4. Cached blame data is invalidated on file save and blame re-executes automatically
   5. Multiple files can be opened concurrently without race conditions or data corruption
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md — Data types, git discovery, and git process wrapper (foundation units)
+- [ ] 02-02-PLAN.md — Porcelain parser, thread-safe cache, and unit tests
+- [ ] 02-03-PLAN.md — Blame engine orchestrator, IDE notifiers, and Registration.pas wiring
 
 ### Phase 3: Inline Rendering and UX
 **Goal**: Users see blame annotations inline at the end of the current code line and can toggle, configure, and navigate blame
@@ -83,6 +85,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Package Foundation | 2/2 | Complete   | 2026-03-19 |
-| 2. Blame Data Pipeline | 0/? | Not started | - |
+| 2. Blame Data Pipeline | 0/3 | Not started | - |
 | 3. Inline Rendering and UX | 0/? | Not started | - |
 | 4. Tooltip and Commit Detail | 0/? | Not started | - |
