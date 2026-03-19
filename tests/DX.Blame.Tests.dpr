@@ -15,6 +15,7 @@
 program DX.Blame.Tests;
 
 {$APPTYPE CONSOLE}
+{$STRONGLINKTYPES ON}
 
 uses
   System.SysUtils,
@@ -24,7 +25,9 @@ uses
   DX.Blame.Tests.Version in 'DX.Blame.Tests.Version.pas',
   DX.Blame.Tests.Git.Blame in 'DX.Blame.Tests.Git.Blame.pas',
   DX.Blame.Tests.Cache in 'DX.Blame.Tests.Cache.pas',
-  DX.Blame.Tests.Git.Discovery in 'DX.Blame.Tests.Git.Discovery.pas';
+  DX.Blame.Tests.Git.Discovery in 'DX.Blame.Tests.Git.Discovery.pas',
+  DX.Blame.Tests.Settings in 'DX.Blame.Tests.Settings.pas',
+  DX.Blame.Tests.Formatter in 'DX.Blame.Tests.Formatter.pas';
 
 var
   LRunner: ITestRunner;
