@@ -1,8 +1,7 @@
 ﻿package DX.Blame;
 
 {$R *.res}
-{$R '..
-es\DX.Blame.res.rc'}
+{$R '..\res\DX.Blame.Splash.res'}
 {$IFDEF IMPLICITBUILDING This SHOULD NOT be defined}
 {$ALIGN 8}
 {$ASSERTIONS ON}
