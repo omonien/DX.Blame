@@ -54,7 +54,6 @@ type
   private
     FFullHash: string;
     FOriginalHashText: string;
-    FOnShowDiffClick: TNotifyEvent;
     FRepoRoot: string;
     FRelativeFilePath: string;
     FLineInfo: TBlameLineInfo;
@@ -81,8 +80,6 @@ type
     procedure UpdateContent(const ALineInfo: TBlameLineInfo;
       const ARepoRoot, ARelativeFilePath: string);
 
-    /// <summary>External handler for the Show Diff button.</summary>
-    property OnShowDiffClick: TNotifyEvent read FOnShowDiffClick write FOnShowDiffClick;
   end;
 
 implementation
@@ -159,9 +156,6 @@ begin
 
   Hide;
   TFormDXBlameDiff.ShowDiff(FFullHash, FRepoRoot, FRelativeFilePath, FLineInfo);
-
-  if Assigned(FOnShowDiffClick) then
-    FOnShowDiffClick(ASender);
 end;
 
 procedure TDXBlamePopup.HandleCommitDetailComplete(const ADetail: TCommitDetail);

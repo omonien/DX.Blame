@@ -34,7 +34,7 @@ function FormatBlameAnnotation(const ALineInfo: TBlameLineInfo;
 
 /// <summary>
 /// Returns the character length of the clickable (underlined) portion of the
-/// annotation. This is the author name if shown, otherwise the date string.
+/// annotation -- the author name span if shown, otherwise the date string length.
 /// Returns 0 for uncommitted lines.
 /// </summary>
 function GetAnnotationClickableLength(const ALineInfo: TBlameLineInfo;
@@ -56,7 +56,9 @@ uses
   System.DateUtils,
   System.StrUtils,
   System.Math,
-  Winapi.Windows;
+  Winapi.Windows,
+  ToolsAPI,
+  ToolsAPI.Editor;
 
 function FormatRelativeTime(ADateTime: TDateTime): string;
 var
@@ -146,10 +148,20 @@ begin
 end;
 
 function DeriveAnnotationColor: TColor;
+var
+  LServices: INTACodeEditorServices;
+  LBgColor: TColor;
+  LR, LG, LB: Byte;
 begin
-  // Fallback for non-IDE context. The renderer (Plan 02) will override this
-  // with INTACodeEditorServices.Options.BackgroundColor[atWhiteSpace] blending.
   Result := clGray;
+  if Supports(BorlandIDEServices, INTACodeEditorServices, LServices) then
+  begin
+    LBgColor := ColorToRGB(LServices.Options.BackgroundColor[atWhiteSpace]);
+    LR := (GetRValue(LBgColor) + 128) div 2;
+    LG := (GetGValue(LBgColor) + 128) div 2;
+    LB := (GetBValue(LBgColor) + 128) div 2;
+    Result := TColor(RGB(LR, LG, LB));
+  end;
 end;
 
 function GetDiffLineColor(const ALine: string; AIsDarkTheme: Boolean;
