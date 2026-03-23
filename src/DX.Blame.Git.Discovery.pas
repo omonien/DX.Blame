@@ -41,9 +41,8 @@ implementation
 
 uses
   System.SysUtils,
-  System.Classes,
   System.IOUtils,
-  Winapi.Windows;
+  DX.Blame.VCS.Process;
 
 var
   GCachedGitPath: string;
@@ -58,68 +57,13 @@ var
 function ExecuteGitSync(const AGitPath, AWorkDir, AArgs: string;
   out AOutput: string): Integer;
 var
-  LSA: TSecurityAttributes;
-  LReadPipe, LWritePipe: THandle;
-  LSI: TStartupInfo;
-  LPI: TProcessInformation;
-  LBuffer: TBytes;
-  LBytesRead: DWORD;
-  LStream: TBytesStream;
-  LExitCode: DWORD;
-  LCmdLine: string;
+  LProcess: TVCSProcess;
 begin
-  Result := -1;
-  AOutput := '';
-
-  LSA.nLength := SizeOf(LSA);
-  LSA.bInheritHandle := True;
-  LSA.lpSecurityDescriptor := nil;
-
-  if not CreatePipe(LReadPipe, LWritePipe, @LSA, 0) then
-    Exit;
+  LProcess := TVCSProcess.Create(AGitPath, AWorkDir);
   try
-    SetHandleInformation(LReadPipe, HANDLE_FLAG_INHERIT, 0);
-
-    FillChar(LSI, SizeOf(LSI), 0);
-    LSI.cb := SizeOf(LSI);
-    LSI.dwFlags := STARTF_USESTDHANDLES or STARTF_USESHOWWINDOW;
-    LSI.hStdOutput := LWritePipe;
-    LSI.hStdError := LWritePipe;
-    LSI.wShowWindow := SW_HIDE;
-
-    LCmdLine := Format('"%s" %s', [AGitPath, AArgs]);
-
-    if not CreateProcess(nil, PChar(LCmdLine), nil, nil, True,
-      CREATE_NO_WINDOW, nil, PChar(AWorkDir), LSI, LPI) then
-      Exit;
-    try
-      // Close write end immediately to avoid deadlock
-      CloseHandle(LWritePipe);
-      LWritePipe := 0;
-
-      LStream := TBytesStream.Create;
-      try
-        SetLength(LBuffer, 4096);
-        while ReadFile(LReadPipe, LBuffer[0], Length(LBuffer), LBytesRead, nil)
-          and (LBytesRead > 0) do
-          LStream.WriteBuffer(LBuffer[0], LBytesRead);
-
-        AOutput := TEncoding.UTF8.GetString(LStream.Bytes, 0, Integer(LStream.Size));
-      finally
-        LStream.Free;
-      end;
-
-      WaitForSingleObject(LPI.hProcess, 5000);
-      GetExitCodeProcess(LPI.hProcess, LExitCode);
-      Result := Integer(LExitCode);
-    finally
-      CloseHandle(LPI.hThread);
-      CloseHandle(LPI.hProcess);
-    end;
+    Result := LProcess.Execute(AArgs, AOutput);
   finally
-    if LWritePipe <> 0 then
-      CloseHandle(LWritePipe);
-    CloseHandle(LReadPipe);
+    LProcess.Free;
   end;
 end;
 
