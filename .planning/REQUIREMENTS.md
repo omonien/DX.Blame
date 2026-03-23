@@ -63,30 +63,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| VCSA-01 | — | Pending |
-| VCSA-02 | — | Pending |
-| VCSA-03 | — | Pending |
-| VCSA-04 | — | Pending |
-| VCSA-05 | — | Pending |
-| HGB-01 | — | Pending |
-| HGB-02 | — | Pending |
-| HGB-03 | — | Pending |
-| HGB-04 | — | Pending |
-| HGB-05 | — | Pending |
-| VCSD-01 | — | Pending |
-| VCSD-02 | — | Pending |
-| VCSD-03 | — | Pending |
-| VCSD-04 | — | Pending |
-| VCSD-05 | — | Pending |
-| SETT-01 | — | Pending |
-| SETT-02 | — | Pending |
-| SETT-03 | — | Pending |
+| VCSA-01 | Phase 6 | Pending |
+| VCSA-02 | Phase 6 | Pending |
+| VCSA-03 | Phase 6 | Pending |
+| VCSA-04 | Phase 6 | Pending |
+| VCSA-05 | Phase 7 | Pending |
+| HGB-01 | Phase 9 | Pending |
+| HGB-02 | Phase 9 | Pending |
+| HGB-03 | Phase 9 | Pending |
+| HGB-04 | Phase 9 | Pending |
+| HGB-05 | Phase 9 | Pending |
+| VCSD-01 | Phase 8 | Pending |
+| VCSD-02 | Phase 8 | Pending |
+| VCSD-03 | Phase 8 | Pending |
+| VCSD-04 | Phase 8 | Pending |
+| VCSD-05 | Phase 8 | Pending |
+| SETT-01 | Phase 10 | Pending |
+| SETT-02 | Phase 10 | Pending |
+| SETT-03 | Phase 10 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 18 total
-- Mapped to phases: 0
-- Unmapped: 18 ⚠️
+- Mapped to phases: 18
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-23*
-*Last updated: 2026-03-23 after initial definition*
+*Last updated: 2026-03-23 after roadmap creation*
