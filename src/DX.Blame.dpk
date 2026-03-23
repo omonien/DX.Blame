@@ -26,7 +26,7 @@
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'DX.Blame - Git Blame for Delphi'}
+{$DESCRIPTION 'DX.Blame - VCS Blame for Delphi'}
 {$DESIGNONLY}
 {$LIBSUFFIX AUTO}
 {$IMPLICITBUILD ON}
@@ -38,6 +38,9 @@ requires
 
 contains
   DX.Blame.Version in 'DX.Blame.Version.pas',
+  DX.Blame.VCS.Types in 'DX.Blame.VCS.Types.pas',
+  DX.Blame.VCS.Process in 'DX.Blame.VCS.Process.pas',
+  DX.Blame.VCS.Provider in 'DX.Blame.VCS.Provider.pas',
   DX.Blame.Git.Types in 'DX.Blame.Git.Types.pas',
   DX.Blame.Git.Discovery in 'DX.Blame.Git.Discovery.pas',
   DX.Blame.Git.Process in 'DX.Blame.Git.Process.pas',
