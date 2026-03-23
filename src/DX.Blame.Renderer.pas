@@ -108,7 +108,7 @@ uses
   DX.Blame.Settings,
   DX.Blame.Formatter,
   DX.Blame.Engine,
-  DX.Blame.Git.Types,
+  DX.Blame.VCS.Types,
   DX.Blame.Cache,
   DX.Blame.Popup,
   DX.Blame.CommitDetail;

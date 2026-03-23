@@ -22,7 +22,7 @@ interface
 uses
   System.SyncObjs,
   System.Generics.Collections,
-  DX.Blame.Git.Types;
+  DX.Blame.VCS.Types;
 
 type
   /// <summary>

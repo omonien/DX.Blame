@@ -45,6 +45,7 @@ contains
   DX.Blame.Git.Discovery in 'DX.Blame.Git.Discovery.pas',
   DX.Blame.Git.Process in 'DX.Blame.Git.Process.pas',
   DX.Blame.Git.Blame in 'DX.Blame.Git.Blame.pas',
+  DX.Blame.Git.Provider in 'DX.Blame.Git.Provider.pas',
   DX.Blame.Cache in 'DX.Blame.Cache.pas',
   DX.Blame.Settings in 'DX.Blame.Settings.pas',
   DX.Blame.Formatter in 'DX.Blame.Formatter.pas',

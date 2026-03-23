@@ -20,6 +20,7 @@ unit DX.Blame.Git.Blame;
 interface
 
 uses
+  DX.Blame.VCS.Types,
   DX.Blame.Git.Types;
 
 /// <summary>

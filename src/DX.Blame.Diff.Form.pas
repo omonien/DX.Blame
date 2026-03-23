@@ -30,7 +30,7 @@ uses
   Vcl.ComCtrls,
   Vcl.Graphics,
   Winapi.Windows,
-  DX.Blame.Git.Types,
+  DX.Blame.VCS.Types,
   DX.Blame.CommitDetail;
 
 type

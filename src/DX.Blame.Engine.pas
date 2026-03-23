@@ -28,7 +28,7 @@ uses
   System.Generics.Collections,
   Vcl.ExtCtrls,
   Winapi.Windows,
-  DX.Blame.Git.Types,
+  DX.Blame.VCS.Types,
   DX.Blame.Cache;
 
 type

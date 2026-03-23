@@ -53,6 +53,7 @@ uses
   Vcl.Dialogs,
   Vcl.Forms,
   ToolsAPI,
+  DX.Blame.VCS.Types,
   DX.Blame.Git.Types,
   DX.Blame.Git.Discovery,
   DX.Blame.Git.Process,

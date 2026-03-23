@@ -33,6 +33,7 @@ uses
   Vcl.Graphics,
   Winapi.Windows,
   Winapi.Messages,
+  DX.Blame.VCS.Types,
   DX.Blame.Git.Types,
   DX.Blame.CommitDetail;
 

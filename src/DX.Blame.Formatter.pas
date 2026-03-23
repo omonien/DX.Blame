@@ -22,6 +22,7 @@ interface
 uses
   System.SysUtils,
   Vcl.Graphics,
+  DX.Blame.VCS.Types,
   DX.Blame.Git.Types,
   DX.Blame.Settings;
 
