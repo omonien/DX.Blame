@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Package Foundation** - Installable BPL with stable OTA lifecycle and clean unload (completed 2026-03-19)
 - [ ] **Phase 2: Blame Data Pipeline** - Async git blame execution, parsing, and thread-safe caching
 - [x] **Phase 3: Inline Rendering and UX** - Visible blame annotations with toggle, navigation, and configuration (completed 2026-03-23)
-- [ ] **Phase 4: Tooltip and Commit Detail** - Hover tooltip with full commit info and diff detail view
+- [ ] **Phase 4: Tooltip and Commit Detail** - Click-triggered popup with full commit info and modal diff detail view
 
 ## Phase Details
 
@@ -68,16 +68,17 @@ Plans:
 - [x] 03-03-PLAN.md — Settings configuration dialog and parent revision navigation
 
 ### Phase 4: Tooltip and Commit Detail
-**Goal**: Users get full commit context on hover and can drill into the complete diff without leaving the IDE
+**Goal**: Users get full commit context by clicking a blame annotation and can drill into the complete diff without leaving the IDE
 **Depends on**: Phase 3
 **Requirements**: TTIP-01, TTIP-02
 **Success Criteria** (what must be TRUE):
-  1. Hovering over the blame annotation shows a tooltip with commit hash, author, full date, and complete commit message
-  2. User can open a commit detail view from the tooltip that displays the full diff (git show output) in a modal dialog
-**Plans**: TBD
+  1. Clicking on the blame annotation shows a popup with commit hash, author, full date, and complete commit message
+  2. User can open a commit detail view from the popup that displays the full diff (git show output) in a modal dialog
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md — Commit detail cache, popup panel, click detection, and renderer wiring
+- [ ] 04-02-PLAN.md — Modal diff dialog with RTF coloring, scope toggle, size persistence, and tests
 
 ## Progress
 
@@ -89,4 +90,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Package Foundation | 2/2 | Complete   | 2026-03-19 |
 | 2. Blame Data Pipeline | 3/3 | Complete | 2026-03-19 |
 | 3. Inline Rendering and UX | 3/3 | Complete | 2026-03-23 |
-| 4. Tooltip and Commit Detail | 0/? | Not started | - |
+| 4. Tooltip and Commit Detail | 0/2 | Planning complete | - |
