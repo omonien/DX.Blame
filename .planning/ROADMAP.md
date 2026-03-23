@@ -41,7 +41,10 @@ Full details: [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md)
   2. Git blame annotations still appear identically in the editor after all refactoring
   3. TGitProcess delegates to a shared TVCSProcess base class with no behavioral change
   4. IVCSProvider interface exists and TGitProvider implements it by wrapping existing Git units
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 06-01-PLAN.md — Create VCS.Types, VCS.Process, VCS.Provider and refactor Git units
+- [ ] 06-02-PLAN.md — Create TGitProvider, update consumer uses clauses, IDE verification
 
 ### Phase 7: Engine VCS Dispatch
 **Goal**: The blame engine is fully provider-agnostic, dispatching all VCS operations through IVCSProvider with zero direct Git calls remaining
@@ -99,7 +102,7 @@ Full details: [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md)
 | 3. Inline Rendering and UX | v1.0 | 3/3 | Complete | 2026-03-23 |
 | 4. Tooltip and Commit Detail | v1.0 | 2/2 | Complete | 2026-03-23 |
 | 5. Tech Debt Cleanup | v1.0 | 1/1 | Complete | 2026-03-23 |
-| 6. VCS Abstraction Foundation | v1.1 | 0/0 | Not started | - |
+| 6. VCS Abstraction Foundation | v1.1 | 0/2 | Planned | - |
 | 7. Engine VCS Dispatch | v1.1 | 0/0 | Not started | - |
 | 8. VCS Discovery | v1.1 | 0/0 | Not started | - |
 | 9. Mercurial Provider | v1.1 | 0/0 | Not started | - |
