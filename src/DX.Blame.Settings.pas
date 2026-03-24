@@ -56,6 +56,11 @@ type
     /// <summary>Returns the full path to the settings INI file.</summary>
     class function GetSettingsPath: string;
 
+    /// <summary>Returns persisted VCS choice for the given project path, or '' if not set.</summary>
+    function GetVCSChoice(const AProjectPath: string): string;
+    /// <summary>Persists VCS choice ('Git' or 'Mercurial') for the given project path.</summary>
+    procedure SetVCSChoice(const AProjectPath, AChoice: string);
+
     property Enabled: Boolean read FEnabled write FEnabled;
     property ShowAuthor: Boolean read FShowAuthor write FShowAuthor;
     property DateFormat: TDXBlameDateFormat read FDateFormat write FDateFormat;
@@ -76,7 +81,8 @@ implementation
 
 uses
   System.IniFiles,
-  System.IOUtils;
+  System.IOUtils,
+  System.Hash;
 
 var
   GBlameSettings: TDXBlameSettings;
@@ -191,6 +197,35 @@ begin
 
     LIni.WriteInteger('DiffDialog', 'Width', FDiffDialogWidth);
     LIni.WriteInteger('DiffDialog', 'Height', FDiffDialogHeight);
+  finally
+    LIni.Free;
+  end;
+end;
+
+function TDXBlameSettings.GetVCSChoice(const AProjectPath: string): string;
+var
+  LIni: TIniFile;
+  LKey: string;
+begin
+  LKey := THashMD5.GetHashString(LowerCase(AProjectPath));
+  LIni := TIniFile.Create(GetSettingsPath);
+  try
+    Result := LIni.ReadString('VCSChoice', LKey, '');
+  finally
+    LIni.Free;
+  end;
+end;
+
+procedure TDXBlameSettings.SetVCSChoice(const AProjectPath, AChoice: string);
+var
+  LIni: TIniFile;
+  LKey: string;
+begin
+  ForceDirectories(ExtractFileDir(GetSettingsPath));
+  LKey := THashMD5.GetHashString(LowerCase(AProjectPath));
+  LIni := TIniFile.Create(GetSettingsPath);
+  try
+    LIni.WriteString('VCSChoice', LKey, AChoice);
   finally
     LIni.Free;
   end;
