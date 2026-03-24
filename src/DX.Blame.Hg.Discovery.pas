@@ -38,6 +38,13 @@ function FindHgRepoRoot(const APath: string): string;
 /// </summary>
 procedure ClearHgDiscoveryCache;
 
+/// <summary>
+/// Returns the full path to thg.exe (TortoiseHg GUI launcher), or an empty
+/// string if not found. Derives the path from hg.exe since both ship in the
+/// same TortoiseHg installation directory.
+/// </summary>
+function FindThgExecutable: string;
+
 implementation
 
 uses
@@ -161,6 +168,18 @@ begin
       Break;
     LDir := LParent;
   end;
+end;
+
+function FindThgExecutable: string;
+var
+  LHgPath: string;
+begin
+  LHgPath := FindHgExecutable;
+  if LHgPath = '' then
+    Exit('');
+  Result := TPath.Combine(TPath.GetDirectoryName(LHgPath), 'thg.exe');
+  if not TFile.Exists(Result) then
+    Result := '';
 end;
 
 procedure ClearHgDiscoveryCache;
