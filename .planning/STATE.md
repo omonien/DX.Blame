@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Mercurial Support
-status: completed
-stopped_at: Completed 08-02-PLAN.md
-last_updated: "2026-03-24T11:02:39.211Z"
-last_activity: 2026-03-24 — Completed 08-02 VCS discovery orchestrator
+status: executing
+stopped_at: Completed 09-01-PLAN.md
+last_updated: "2026-03-24T13:29:29.401Z"
+last_activity: 2026-03-24 — Completed 09-01 Mercurial foundation units
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
-  percent: 90
+  total_plans: 8
+  completed_plans: 7
+  percent: 88
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-23)
 
 **Core value:** Der Entwickler sieht auf einen Blick, wer eine Codezeile zuletzt geaendert hat und wann, ohne die IDE verlassen zu muessen.
-**Current focus:** v1.1 Mercurial Support — Phase 8 in progress (VCS Discovery)
+**Current focus:** v1.1 Mercurial Support — Phase 9 in progress (Mercurial Provider)
 
 ## Current Position
 
-Phase: 8 of 10 (VCS Discovery)
-Plan: 2 of 2 complete
-Status: Completed
-Last activity: 2026-03-24 — Completed 08-02 VCS discovery orchestrator
+Phase: 9 of 10 (Mercurial Provider)
+Plan: 1 of 2 complete
+Status: In Progress
+Last activity: 2026-03-24 — Completed 09-01 Mercurial foundation units
 
-Progress: [█████████░] 90%
+Progress: [█████████░] 88%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [█████████░] 90%
 | Phase 07 P02 | 3min | 2 tasks | 3 files |
 | Phase 08 P01 | 3min | 2 tasks | 3 files |
 | Phase 08 P02 | 3min | 2 tasks | 4 files |
+| Phase 09 P01 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,9 @@ v1.1 research completed with HIGH confidence across all areas.
 - [Phase 08]: Nested local functions in DetectProvider keep interface minimal (single public class method)
 - [Phase 08]: Default to Git when user dismisses dual-VCS dialog — preserves existing behavior
 - [Phase 08]: OnProjectSwitch clears both Git and Hg caches explicitly (not via provider)
+- [Phase 09]: Full 40-char node hash for cHgUncommittedHash (not 12-char short form from Phase 8)
+- [Phase 09]: Added {desc|firstline} as 5th template field for Summary population
+- [Phase 09]: Positional field extraction via Pos() instead of Split to handle pipes in line content
 
 ### Pending Todos
 
@@ -83,6 +87,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-24T10:58:02Z
-Stopped at: Completed 08-02-PLAN.md
-Resume file: Phase 08 complete — next phase: 09
+Last session: 2026-03-24T13:29:29.358Z
+Stopped at: Completed 09-01-PLAN.md
+Resume file: None

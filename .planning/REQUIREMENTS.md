@@ -21,7 +21,7 @@ Requirements for Mercurial support milestone. Each maps to roadmap phases.
 - [ ] **HGB-02**: User can click annotation to see commit details (hash, author, date, message) via hg log
 - [ ] **HGB-03**: User can view RTF color-coded diff for Mercurial commits via hg diff -c
 - [ ] **HGB-04**: User can navigate to annotated revision via hg cat -r
-- [ ] **HGB-05**: Mercurial blame uses dedicated template-based parser (not adapted Git parser)
+- [x] **HGB-05**: Mercurial blame uses dedicated template-based parser (not adapted Git parser)
 
 ### VCS Detection
 
@@ -72,7 +72,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HGB-02 | Phase 9 | Pending |
 | HGB-03 | Phase 9 | Pending |
 | HGB-04 | Phase 9 | Pending |
-| HGB-05 | Phase 9 | Pending |
+| HGB-05 | Phase 9 | Complete |
 | VCSD-01 | Phase 8 | Complete |
 | VCSD-02 | Phase 8 | Complete |
 | VCSD-03 | Phase 8 | Complete |
