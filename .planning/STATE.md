@@ -4,7 +4,7 @@ milestone: v1.1
 milestone_name: Mercurial Support
 status: completed
 stopped_at: Completed 10-01-PLAN.md
-last_updated: "2026-03-24T19:28:57.991Z"
+last_updated: "2026-03-24T19:39:13.527Z"
 last_activity: 2026-03-24 — Completed 10-02 TortoiseHg context menu integration
 progress:
   total_phases: 5
