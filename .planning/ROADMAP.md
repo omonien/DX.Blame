@@ -27,7 +27,7 @@ Full details: [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md)
 - [ ] **Phase 6: VCS Abstraction Foundation** - Shared types, process base class, IVCSProvider interface, and Git provider wrapper
 - [ ] **Phase 7: Engine VCS Dispatch** - Engine and commit detail units dispatch through IVCSProvider instead of direct Git calls
 - [ ] **Phase 8: VCS Discovery** - Auto-detection of .git/.hg, hg.exe discovery, dual-VCS conflict resolution with per-project persistence
-- [ ] **Phase 9: Mercurial Provider** - Full Mercurial blame, commit details, diff, and revision navigation at Git feature parity
+- [x] **Phase 9: Mercurial Provider** - Full Mercurial blame, commit details, diff, and revision navigation at Git feature parity (completed 2026-03-24)
 - [ ] **Phase 10: Settings and TortoiseHg Integration** - VCS preference in settings dialog, TortoiseHg context menu actions
 
 ## Phase Details
@@ -85,7 +85,7 @@ Plans:
   3. User opens the diff dialog and sees RTF color-coded diff for a Mercurial commit
   4. User navigates to the annotated revision via context menu (hg cat retrieves file content)
   5. Mercurial blame uses a dedicated template-based parser, not an adapted Git parser
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 09-01-PLAN.md — Create Hg.Types, Hg.Process, Hg.Blame units (dedicated template-based parser)
 - [ ] 09-02-PLAN.md — Replace THgProvider stubs with real implementations, register units in package
@@ -114,5 +114,5 @@ Plans:
 | 6. VCS Abstraction Foundation | v1.1 | 2/2 | Complete | 2026-03-24 |
 | 7. Engine VCS Dispatch | v1.1 | 2/2 | Complete | 2026-03-24 |
 | 8. VCS Discovery | v1.1 | 2/2 | Complete | 2026-03-24 |
-| 9. Mercurial Provider | v1.1 | 0/2 | Not started | - |
+| 9. Mercurial Provider | 2/2 | Complete   | 2026-03-24 | - |
 | 10. Settings and TortoiseHg Integration | v1.1 | 0/0 | Not started | - |

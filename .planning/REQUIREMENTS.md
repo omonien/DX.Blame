@@ -17,10 +17,10 @@ Requirements for Mercurial support milestone. Each maps to roadmap phases.
 
 ### Mercurial Blame
 
-- [ ] **HGB-01**: User sees inline blame annotations for Mercurial-tracked files via hg annotate -T
-- [ ] **HGB-02**: User can click annotation to see commit details (hash, author, date, message) via hg log
-- [ ] **HGB-03**: User can view RTF color-coded diff for Mercurial commits via hg diff -c
-- [ ] **HGB-04**: User can navigate to annotated revision via hg cat -r
+- [x] **HGB-01**: User sees inline blame annotations for Mercurial-tracked files via hg annotate -T
+- [x] **HGB-02**: User can click annotation to see commit details (hash, author, date, message) via hg log
+- [x] **HGB-03**: User can view RTF color-coded diff for Mercurial commits via hg diff -c
+- [x] **HGB-04**: User can navigate to annotated revision via hg cat -r
 - [x] **HGB-05**: Mercurial blame uses dedicated template-based parser (not adapted Git parser)
 
 ### VCS Detection
@@ -68,10 +68,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VCSA-03 | Phase 6 | Complete |
 | VCSA-04 | Phase 6 | Complete |
 | VCSA-05 | Phase 7 | Complete |
-| HGB-01 | Phase 9 | Pending |
-| HGB-02 | Phase 9 | Pending |
-| HGB-03 | Phase 9 | Pending |
-| HGB-04 | Phase 9 | Pending |
+| HGB-01 | Phase 9 | Complete |
+| HGB-02 | Phase 9 | Complete |
+| HGB-03 | Phase 9 | Complete |
+| HGB-04 | Phase 9 | Complete |
 | HGB-05 | Phase 9 | Complete |
 | VCSD-01 | Phase 8 | Complete |
 | VCSD-02 | Phase 8 | Complete |

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Mercurial Support
-status: executing
-stopped_at: Completed 09-01-PLAN.md
-last_updated: "2026-03-24T13:29:29.401Z"
-last_activity: 2026-03-24 — Completed 09-01 Mercurial foundation units
+status: completed
+stopped_at: Completed 09-02-PLAN.md
+last_updated: "2026-03-24T13:35:30.358Z"
+last_activity: 2026-03-24 — Completed 09-02 THgProvider implementation
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 8
-  completed_plans: 7
-  percent: 88
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-23)
 ## Current Position
 
 Phase: 9 of 10 (Mercurial Provider)
-Plan: 1 of 2 complete
-Status: In Progress
-Last activity: 2026-03-24 — Completed 09-01 Mercurial foundation units
+Plan: 2 of 2 complete
+Status: Complete
+Last activity: 2026-03-24 — Completed 09-02 THgProvider implementation
 
-Progress: [█████████░] 88%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [█████████░] 88%
 | Phase 08 P01 | 3min | 2 tasks | 3 files |
 | Phase 08 P02 | 3min | 2 tasks | 4 files |
 | Phase 09 P01 | 4min | 2 tasks | 3 files |
+| Phase 09 P02 | 3min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ v1.1 research completed with HIGH confidence across all areas.
 - [Phase 09]: Full 40-char node hash for cHgUncommittedHash (not 12-char short form from Phase 8)
 - [Phase 09]: Added {desc|firstline} as 5th template field for Summary population
 - [Phase 09]: Positional field extraction via Pos() instead of Split to handle pipes in line content
+- [Phase 09]: Mirrored TGitProvider delegation pattern exactly for THgProvider
+- [Phase 09]: Fixed for-loop variable assignment in Hg.Blame parser for Delphi 13 compilation
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-24T13:29:29.358Z
-Stopped at: Completed 09-01-PLAN.md
+Last session: 2026-03-24T13:35:30.313Z
+Stopped at: Completed 09-02-PLAN.md
 Resume file: None
