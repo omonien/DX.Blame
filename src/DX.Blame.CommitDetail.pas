@@ -7,7 +7,7 @@
 /// Provides TCommitDetail record for storing full commit message, file-specific
 /// diff, and full-commit diff. TCommitDetailCache is a thread-safe dictionary
 /// keyed by 40-char commit hash. FetchCommitDetailAsync spawns a background
-/// thread using the TGitProcess pattern to retrieve data via git log and git show.
+/// thread using the VCS provider to retrieve data via commit log and show commands.
 /// </remarks>
 ///
 /// <copyright>
@@ -23,20 +23,21 @@ uses
   System.SysUtils,
   System.Classes,
   System.SyncObjs,
-  System.Generics.Collections;
+  System.Generics.Collections,
+  DX.Blame.VCS.Provider;
 
 type
   /// <summary>
   /// Holds the full commit message and diff data fetched asynchronously.
   /// </summary>
   TCommitDetail = record
-    /// <summary>Full multi-line commit message from git log --format=%B.</summary>
+    /// <summary>Full multi-line commit message.</summary>
     FullMessage: string;
-    /// <summary>Diff output for a single file from git show &lt;hash&gt; -- &lt;file&gt;.</summary>
+    /// <summary>Diff output for a single file within the commit.</summary>
     FileDiff: string;
-    /// <summary>Full commit diff from git show &lt;hash&gt;.</summary>
+    /// <summary>Full commit diff for all files.</summary>
     FullDiff: string;
-    /// <summary>True when data has been fetched from git.</summary>
+    /// <summary>True when data has been fetched from the VCS.</summary>
     Fetched: Boolean;
   end;
 
@@ -66,11 +67,12 @@ type
   TCommitDetailCompleteEvent = procedure(const ADetail: TCommitDetail) of object;
 
   /// <summary>
-  /// Background thread that fetches full commit message and diffs via git.
+  /// Background thread that fetches full commit message and diffs via VCS provider.
   /// Follows the TBlameThread pattern from DX.Blame.Engine.
   /// </summary>
   TCommitDetailThread = class(TThread)
   private
+    FProvider: IVCSProvider;
     FCommitHash: string;
     FRepoRoot: string;
     FRelativeFilePath: string;
@@ -78,8 +80,8 @@ type
   protected
     procedure Execute; override;
   public
-    constructor Create(const ACommitHash, ARepoRoot, ARelativeFilePath: string;
-      AOnComplete: TCommitDetailCompleteEvent);
+    constructor Create(AProvider: IVCSProvider; const ACommitHash, ARepoRoot,
+      ARelativeFilePath: string; AOnComplete: TCommitDetailCompleteEvent);
   end;
 
 /// <summary>Returns the singleton TCommitDetailCache instance (lazy-initialized).</summary>
@@ -89,14 +91,11 @@ function CommitDetailCache: TCommitDetailCache;
 /// Starts an async fetch of commit detail data in a background thread.
 /// On completion, delivers the result to the main thread via AOnComplete.
 /// </summary>
-procedure FetchCommitDetailAsync(const ACommitHash, ARepoRoot, ARelativeFilePath: string;
+procedure FetchCommitDetailAsync(AProvider: IVCSProvider;
+  const ACommitHash, ARepoRoot, ARelativeFilePath: string;
   AOnComplete: TCommitDetailCompleteEvent);
 
 implementation
-
-uses
-  DX.Blame.Git.Discovery,
-  DX.Blame.Git.Process;
 
 var
   GCommitDetailCache: TCommitDetailCache;
@@ -158,11 +157,13 @@ end;
 
 { TCommitDetailThread }
 
-constructor TCommitDetailThread.Create(const ACommitHash, ARepoRoot,
-  ARelativeFilePath: string; AOnComplete: TCommitDetailCompleteEvent);
+constructor TCommitDetailThread.Create(AProvider: IVCSProvider;
+  const ACommitHash, ARepoRoot, ARelativeFilePath: string;
+  AOnComplete: TCommitDetailCompleteEvent);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
+  FProvider := AProvider;
   FCommitHash := ACommitHash;
   FRepoRoot := ARepoRoot;
   FRelativeFilePath := ARelativeFilePath;
@@ -171,62 +172,48 @@ end;
 
 procedure TCommitDetailThread.Execute;
 var
-  LProcess: TGitProcess;
   LOutput: string;
-  LGitPath: string;
   LDetail: TCommitDetail;
   LOnComplete: TCommitDetailCompleteEvent;
 begin
-  LGitPath := FindGitExecutable;
-  if LGitPath = '' then
-    Exit;
-
   LOnComplete := FOnComplete;
 
-  LProcess := TGitProcess.Create(LGitPath, FRepoRoot);
-  try
-    // Fetch full commit message
-    if LProcess.Execute('log -1 --format=%B ' + FCommitHash, LOutput) = 0 then
-      LDetail.FullMessage := Trim(LOutput);
+  // Fetch full commit message
+  if FProvider.GetCommitMessage(FRepoRoot, FCommitHash, LOutput) then
+    LDetail.FullMessage := Trim(LOutput);
 
-    if Terminated then
-      Exit;
+  if Terminated then
+    Exit;
 
-    // Fetch file-specific diff
-    if FRelativeFilePath <> '' then
+  // Fetch file-specific diff
+  if FRelativeFilePath <> '' then
+    FProvider.GetFileDiff(FRepoRoot, FCommitHash, FRelativeFilePath, LDetail.FileDiff);
+
+  if Terminated then
+    Exit;
+
+  // Fetch full commit diff
+  FProvider.GetFullDiff(FRepoRoot, FCommitHash, LDetail.FullDiff);
+
+  LDetail.Fetched := True;
+
+  TThread.Queue(nil,
+    procedure
     begin
-      if LProcess.Execute('show ' + FCommitHash + ' -- "' + FRelativeFilePath + '"', LOutput) = 0 then
-        LDetail.FileDiff := LOutput;
-    end;
-
-    if Terminated then
-      Exit;
-
-    // Fetch full commit diff
-    if LProcess.Execute('show ' + FCommitHash, LOutput) = 0 then
-      LDetail.FullDiff := LOutput;
-
-    LDetail.Fetched := True;
-
-    TThread.Queue(nil,
-      procedure
-      begin
-        if Assigned(LOnComplete) then
-          LOnComplete(LDetail);
-      end);
-  finally
-    LProcess.Free;
-  end;
+      if Assigned(LOnComplete) then
+        LOnComplete(LDetail);
+    end);
 end;
 
 { Module-level }
 
-procedure FetchCommitDetailAsync(const ACommitHash, ARepoRoot,
-  ARelativeFilePath: string; AOnComplete: TCommitDetailCompleteEvent);
+procedure FetchCommitDetailAsync(AProvider: IVCSProvider;
+  const ACommitHash, ARepoRoot, ARelativeFilePath: string;
+  AOnComplete: TCommitDetailCompleteEvent);
 var
   LThread: TCommitDetailThread;
 begin
-  LThread := TCommitDetailThread.Create(ACommitHash, ARepoRoot,
+  LThread := TCommitDetailThread.Create(AProvider, ACommitHash, ARepoRoot,
     ARelativeFilePath, AOnComplete);
   LThread.Start;
 end;
