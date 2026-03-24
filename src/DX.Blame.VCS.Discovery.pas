@@ -176,6 +176,37 @@ begin
   Result := nil;
   ARepoRoot := '';
 
+  // Forced VCS preference bypasses auto-detection
+  case BlameSettings.VCSPreference of
+    vpGit:
+    begin
+      Result := TGitProvider.Create;
+      if Result.FindExecutable = '' then
+      begin
+        Result := nil;
+        Exit;
+      end;
+      ARepoRoot := Result.FindRepoRoot(AProjectPath);
+      if ARepoRoot = '' then
+        Result := nil;
+      Exit;
+    end;
+    vpMercurial:
+    begin
+      Result := THgProvider.Create;
+      if Result.FindExecutable = '' then
+      begin
+        Result := nil;
+        Exit;
+      end;
+      ARepoRoot := Result.FindRepoRoot(AProjectPath);
+      if ARepoRoot = '' then
+        Result := nil;
+      Exit;
+    end;
+  end;
+  // vpAuto falls through to existing auto-detection
+
   if not ScanForVCS(AProjectPath, LHasGit, LHasHg) then
     Exit;
 

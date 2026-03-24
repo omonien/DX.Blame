@@ -30,6 +30,9 @@ type
   /// <summary>Display scope for blame annotations.</summary>
   TDXBlameDisplayScope = (dsCurrentLine, dsAllLines);
 
+  /// <summary>VCS backend preference: Auto-detect or force a specific provider.</summary>
+  TDXBlameVCSPreference = (vpAuto, vpGit, vpMercurial);
+
   /// <summary>
   /// Singleton settings for DX.Blame with INI file persistence.
   /// </summary>
@@ -46,6 +49,7 @@ type
     FToggleHotkey: string;
     FDiffDialogWidth: Integer;
     FDiffDialogHeight: Integer;
+    FVCSPreference: TDXBlameVCSPreference;
   public
     constructor Create;
 
@@ -72,6 +76,7 @@ type
     property ToggleHotkey: string read FToggleHotkey write FToggleHotkey;
     property DiffDialogWidth: Integer read FDiffDialogWidth write FDiffDialogWidth;
     property DiffDialogHeight: Integer read FDiffDialogHeight write FDiffDialogHeight;
+    property VCSPreference: TDXBlameVCSPreference read FVCSPreference write FVCSPreference;
   end;
 
 /// <summary>Returns the singleton TDXBlameSettings instance (lazy-initialized).</summary>
@@ -110,6 +115,7 @@ begin
   FToggleHotkey := 'Ctrl+Alt+B';
   FDiffDialogWidth := 800;
   FDiffDialogHeight := 600;
+  FVCSPreference := vpAuto;
   Load;
 end;
 
@@ -125,6 +131,7 @@ var
   LPath: string;
   LDateStr: string;
   LScopeStr: string;
+  LPrefStr: string;
 begin
   LPath := GetSettingsPath;
   if not FileExists(LPath) then
@@ -158,6 +165,14 @@ begin
 
     FDiffDialogWidth := LIni.ReadInteger('DiffDialog', 'Width', 800);
     FDiffDialogHeight := LIni.ReadInteger('DiffDialog', 'Height', 600);
+
+    LPrefStr := LIni.ReadString('VCS', 'Preference', 'Auto');
+    if SameText(LPrefStr, 'Git') then
+      FVCSPreference := vpGit
+    else if SameText(LPrefStr, 'Mercurial') then
+      FVCSPreference := vpMercurial
+    else
+      FVCSPreference := vpAuto;
   finally
     LIni.Free;
   end;
@@ -197,6 +212,12 @@ begin
 
     LIni.WriteInteger('DiffDialog', 'Width', FDiffDialogWidth);
     LIni.WriteInteger('DiffDialog', 'Height', FDiffDialogHeight);
+
+    case FVCSPreference of
+      vpAuto: LIni.WriteString('VCS', 'Preference', 'Auto');
+      vpGit: LIni.WriteString('VCS', 'Preference', 'Git');
+      vpMercurial: LIni.WriteString('VCS', 'Preference', 'Mercurial');
+    end;
   finally
     LIni.Free;
   end;
