@@ -4,12 +4,12 @@ milestone: v1.1
 milestone_name: Mercurial Support
 status: completed
 stopped_at: Completed 08-02-PLAN.md
-last_updated: "2026-03-24T09:32:57.292Z"
+last_updated: "2026-03-24T11:02:39.211Z"
 last_activity: 2026-03-24 — Completed 08-02 VCS discovery orchestrator
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 4
+  completed_phases: 3
+  total_plans: 6
   completed_plans: 6
   percent: 90
 ---
