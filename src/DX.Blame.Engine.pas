@@ -113,7 +113,9 @@ uses
   ToolsAPI,
   ToolsAPI.Editor,
   DX.Blame.VCS.Process,
-  DX.Blame.Git.Provider,
+  DX.Blame.VCS.Discovery,
+  DX.Blame.Git.Discovery,
+  DX.Blame.Hg.Discovery,
   DX.Blame.CommitDetail;
 
 var
@@ -219,34 +221,22 @@ begin
 end;
 
 procedure TBlameEngine.Initialize(const AProjectPath: string);
-var
-  LExePath: string;
 begin
-  FProvider := TGitProvider.Create;
+  FProvider := TVCSDiscovery.DetectProvider(AProjectPath, FRepoRoot);
 
-  LExePath := FProvider.FindExecutable;
-  if LExePath = '' then
+  if FProvider = nil then
   begin
     FVCSAvailable := False;
     if not FVCSNotified then
     begin
       FVCSNotified := True;
-      LogToIDE('DX.Blame: VCS executable not found on PATH or common locations. Blame features disabled.');
+      LogToIDE('DX.Blame: No VCS repository detected. Blame features disabled.');
     end;
     Exit;
   end;
 
-  FRepoRoot := FProvider.FindRepoRoot(AProjectPath);
-  if FRepoRoot = '' then
-  begin
-    FVCSAvailable := False;
-    Exit;
-  end;
-
   FVCSAvailable := True;
-  {$IFDEF DEBUG}
-  LogToIDE('DX.Blame: initialized, repo root = ' + FRepoRoot);
-  {$ENDIF}
+  LogToIDE('DX.Blame: ' + FProvider.GetDisplayName + ' repository detected at ' + FRepoRoot);
 end;
 
 procedure TBlameEngine.RequestBlame(const AFileName: string);
@@ -402,9 +392,10 @@ begin
   FCache.Clear;
   CommitDetailCache.Clear;
   FRetryFailed.Clear;
-  if FProvider <> nil then
-    FProvider.ClearDiscoveryCache;
   FProvider := nil;
+  // Clear both discovery caches to ensure fresh detection on project switch
+  DX.Blame.Git.Discovery.ClearDiscoveryCache;
+  DX.Blame.Hg.Discovery.ClearHgDiscoveryCache;
   Initialize(ANewProjectPath);
 end;
 
