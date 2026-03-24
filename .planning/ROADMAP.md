@@ -72,8 +72,8 @@ Plans:
   5. Mercurial repository is verified with hg root before the Hg backend activates
 **Plans:** 2 plans
 Plans:
-- [ ] 08-01-PLAN.md — Create Hg.Discovery (executable finder + repo root detection) and THgProvider stub
-- [ ] 08-02-PLAN.md — Create VCS.Discovery orchestrator, integrate into Engine, add unconditional VCS logging
+- [x] 08-01-PLAN.md — Create Hg.Discovery (executable finder + repo root detection) and THgProvider stub
+- [x] 08-02-PLAN.md — Create VCS.Discovery orchestrator, integrate into Engine, add unconditional VCS logging
 
 ### Phase 9: Mercurial Provider
 **Goal**: Users see full blame annotations, commit details, diffs, and revision navigation for Mercurial-tracked files at parity with Git
@@ -110,6 +110,6 @@ Plans:
 | 5. Tech Debt Cleanup | v1.0 | 1/1 | Complete | 2026-03-23 |
 | 6. VCS Abstraction Foundation | v1.1 | 2/2 | Complete | 2026-03-24 |
 | 7. Engine VCS Dispatch | v1.1 | 2/2 | Complete | 2026-03-24 |
-| 8. VCS Discovery | v1.1 | 1/2 | In Progress | - |
+| 8. VCS Discovery | v1.1 | 2/2 | Complete | 2026-03-24 |
 | 9. Mercurial Provider | v1.1 | 0/0 | Not started | - |
 | 10. Settings and TortoiseHg Integration | v1.1 | 0/0 | Not started | - |

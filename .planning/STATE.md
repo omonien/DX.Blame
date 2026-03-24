@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Mercurial Support
 status: completed
-stopped_at: Completed 08-01-PLAN.md
+stopped_at: Completed 08-02-PLAN.md
 last_updated: "2026-03-24T09:32:57.292Z"
-last_activity: 2026-03-24 — Completed 08-01 Mercurial discovery infrastructure
+last_activity: 2026-03-24 — Completed 08-02 VCS discovery orchestrator
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 4
-  completed_plans: 5
-  percent: 82
+  completed_plans: 6
+  percent: 90
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-23)
 ## Current Position
 
 Phase: 8 of 10 (VCS Discovery)
-Plan: 1 of 2 complete
-Status: In Progress
-Last activity: 2026-03-24 — Completed 08-01 Mercurial discovery infrastructure
+Plan: 2 of 2 complete
+Status: Completed
+Last activity: 2026-03-24 — Completed 08-02 VCS discovery orchestrator
 
-Progress: [████████░░] 82%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Progress: [████████░░] 82%
 | Phase 07 P01 | 4min | 2 tasks | 3 files |
 | Phase 07 P02 | 3min | 2 tasks | 3 files |
 | Phase 08 P01 | 3min | 2 tasks | 3 files |
+| Phase 08 P02 | 3min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,9 @@ v1.1 research completed with HIGH confidence across all areas.
 - [Phase 08]: No registry lookup for TortoiseHg — PATH + default dirs cover standard installs
 - [Phase 08]: No fallback when hg.exe missing — Mercurial without executable is unusable
 - [Phase 08]: Uncommitted hash uses Mercurial convention ffffffffffff (12 hex f chars)
+- [Phase 08]: Nested local functions in DetectProvider keep interface minimal (single public class method)
+- [Phase 08]: Default to Git when user dismisses dual-VCS dialog — preserves existing behavior
+- [Phase 08]: OnProjectSwitch clears both Git and Hg caches explicitly (not via provider)
 
 ### Pending Todos
 
@@ -79,6 +83,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-24T10:48:46Z
-Stopped at: Completed 08-01-PLAN.md
-Resume file: .planning/phases/08-vcs-discovery/08-02-PLAN.md
+Last session: 2026-03-24T10:58:02Z
+Stopped at: Completed 08-02-PLAN.md
+Resume file: Phase 08 complete — next phase: 09

@@ -28,8 +28,8 @@ Requirements for Mercurial support milestone. Each maps to roadmap phases.
 - [x] **VCSD-01**: Plugin auto-detects .git or .hg directory in project tree
 - [x] **VCSD-02**: Plugin discovers hg.exe via PATH and TortoiseHg installation paths
 - [x] **VCSD-03**: Plugin verifies repository with hg root before activating Mercurial backend
-- [ ] **VCSD-04**: User is prompted once per project when both .git and .hg are present, choice is persisted
-- [ ] **VCSD-05**: Active VCS backend is indicated in IDE Messages
+- [x] **VCSD-04**: User is prompted once per project when both .git and .hg are present, choice is persisted
+- [x] **VCSD-05**: Active VCS backend is indicated in IDE Messages
 
 ### Settings & UI
 
@@ -76,8 +76,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VCSD-01 | Phase 8 | Complete |
 | VCSD-02 | Phase 8 | Complete |
 | VCSD-03 | Phase 8 | Complete |
-| VCSD-04 | Phase 8 | Pending |
-| VCSD-05 | Phase 8 | Pending |
+| VCSD-04 | Phase 8 | Complete |
+| VCSD-05 | Phase 8 | Complete |
 | SETT-01 | Phase 10 | Pending |
 | SETT-02 | Phase 10 | Pending |
 | SETT-03 | Phase 10 | Pending |
