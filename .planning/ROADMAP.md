@@ -112,7 +112,9 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Retry timers created by HandleBlameError are cancelled when ClearAllTimers runs during project switch
   2. FVCSNotified is reset to False on OnProjectSwitch so each project gets its own diagnostic message
-**Plans:** 0/1
+**Plans:** 1 plan
+Plans:
+- [ ] 11-01-PLAN.md — Track retry timers in FRetryTimers dictionary and reset FVCSNotified on project switch
 
 ## Progress
 
