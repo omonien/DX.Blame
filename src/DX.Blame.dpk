@@ -59,6 +59,7 @@ contains
   DX.Blame.Popup in 'DX.Blame.Popup.pas' {DXBlamePopup},
   DX.Blame.Diff.Form in 'DX.Blame.Diff.Form.pas' {FormDXBlameDiff},
   DX.Blame.Renderer in 'DX.Blame.Renderer.pas',
+  DX.Blame.Statusbar in 'DX.Blame.Statusbar.pas',
   DX.Blame.KeyBinding in 'DX.Blame.KeyBinding.pas',
   DX.Blame.Navigation in 'DX.Blame.Navigation.pas',
   DX.Blame.Settings.Form in 'DX.Blame.Settings.Form.pas' {FormDXBlameSettings},

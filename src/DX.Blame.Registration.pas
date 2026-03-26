@@ -36,6 +36,7 @@ uses
   DX.Blame.IDE.Notifier,
   DX.Blame.Engine,
   DX.Blame.Renderer,
+  DX.Blame.Statusbar,
   DX.Blame.KeyBinding,
   DX.Blame.Settings,
   DX.Blame.Settings.Form,
@@ -47,6 +48,7 @@ var
   GMenuParentItem: TMenuItem = nil;
   GEnableBlameItem: TMenuItem = nil;
   GMenuHandler: TObject = nil;
+  GStatusbar: TDXBlameStatusbar = nil;
 
 type
   /// <summary>
@@ -233,6 +235,16 @@ begin
   end;
 end;
 
+/// <summary>
+/// Standalone wrapper so the plain GOnCaretMoved procedure variable can
+/// dispatch to the TDXBlameStatusbar method without needing an 'of object' type.
+/// </summary>
+procedure OnCaretMovedHandler(const AFileName: string; ALine: Integer);
+begin
+  if GStatusbar <> nil then
+    GStatusbar.UpdateForLine(AFileName, ALine);
+end;
+
 procedure Register;
 var
   LWizardServices: IOTAWizardServices;
@@ -283,6 +295,19 @@ begin
   // Attach "Previous Revision" item to the editor context menu
   AttachContextMenu;
 
+  // Create and attach statusbar blame panel to the top edit window
+  GStatusbar := TDXBlameStatusbar.Create(nil);
+  var LNTAEditorServices: INTAEditorServices;
+  if Supports(BorlandIDEServices, INTAEditorServices, LNTAEditorServices) then
+  begin
+    var LEditWindow := LNTAEditorServices.TopEditWindow;
+    if (LEditWindow <> nil) and (LEditWindow.StatusBar <> nil) then
+      GStatusbar.AttachToStatusBar(LEditWindow.StatusBar);
+  end;
+
+  // Wire caret-moved callback so statusbar updates on cursor movement
+  DX.Blame.Renderer.GOnCaretMoved := OnCaretMovedHandler;
+
   // Request blame for files already open before the package loaded
   BlameAlreadyOpenFiles;
 end;
@@ -311,6 +336,14 @@ finalization
 
   // 3. Clean up popup panel before stopping renderer
   CleanupPopup;
+
+  // 3.5. Clean up statusbar panel before stopping renderer
+  DX.Blame.Renderer.GOnCaretMoved := nil;
+  if GStatusbar <> nil then
+  begin
+    GStatusbar.DetachFromStatusBar;
+    FreeAndNil(GStatusbar);
+  end;
 
   // 4. Stop renderer (must stop painting before notifiers are removed)
   UnregisterRenderer;

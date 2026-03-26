@@ -101,6 +101,14 @@ procedure InvalidateAllEditors;
 /// <summary>Cleans up the popup panel. Called during finalization.</summary>
 procedure CleanupPopup;
 
+var
+  /// <summary>
+  /// Optional callback invoked when the editor caret moves to a new position.
+  /// Assigned by Registration.pas to wire statusbar updates. Nil when statusbar
+  /// feature is not active.
+  /// </summary>
+  GOnCaretMoved: procedure(const AFileName: string; ALine: Integer);
+
 implementation
 
 uses
@@ -175,6 +183,10 @@ begin
   // caret line is read from EditView.CursorPos.Line in PaintLine.
   FCurrentEditor := Editor;
   InvalidateAllEditors;
+  // Notify statusbar of caret movement using FCurrentLine from the last paint
+  // cycle. FCurrentLine may lag one paint cycle, which is imperceptible.
+  if Assigned(GOnCaretMoved) and (FCurrentFileName <> '') then
+    GOnCaretMoved(FCurrentFileName, FCurrentLine);
 end;
 
 procedure TDXBlameRenderer.BeginPaint(const Editor: TWinControl;

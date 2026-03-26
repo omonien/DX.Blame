@@ -55,6 +55,7 @@ type
     FVCSPreference: TDXBlameVCSPreference;
     FAnnotationPosition: TDXBlameAnnotationPosition;
     FShowInline: Boolean;
+    FShowStatusbar: Boolean;
   public
     constructor Create;
 
@@ -85,6 +86,8 @@ type
     property AnnotationPosition: TDXBlameAnnotationPosition read FAnnotationPosition write FAnnotationPosition;
     /// <summary>When False, PaintLine exits early — inline annotations are suppressed even if blame is globally enabled.</summary>
     property ShowInline: Boolean read FShowInline write FShowInline;
+    /// <summary>When True, blame info for the current caret line is displayed in the IDE statusbar panel.</summary>
+    property ShowStatusbar: Boolean read FShowStatusbar write FShowStatusbar;
   end;
 
 /// <summary>Returns the singleton TDXBlameSettings instance (lazy-initialized).</summary>
@@ -126,6 +129,7 @@ begin
   FVCSPreference := vpAuto;
   FAnnotationPosition := apEndOfLine;
   FShowInline := True;
+  FShowStatusbar := False;
   Load;
 end;
 
@@ -192,6 +196,7 @@ begin
       FAnnotationPosition := apEndOfLine;
 
     FShowInline := LIni.ReadBool('Display', 'ShowInline', True);
+    FShowStatusbar := LIni.ReadBool('Display', 'ShowStatusbar', False);
   finally
     LIni.Free;
   end;
@@ -244,6 +249,7 @@ begin
     end;
 
     LIni.WriteBool('Display', 'ShowInline', FShowInline);
+    LIni.WriteBool('Display', 'ShowStatusbar', FShowStatusbar);
   finally
     LIni.Free;
   end;

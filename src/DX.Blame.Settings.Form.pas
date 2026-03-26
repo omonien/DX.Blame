@@ -55,6 +55,7 @@ type
     LabelAnnotationPosition: TLabel;
     ComboBoxAnnotationPosition: TComboBox;
     CheckBoxShowInline: TCheckBox;
+    CheckBoxShowStatusbar: TCheckBox;
     GroupBoxVCS: TGroupBox;
     LabelVCSPreference: TLabel;
     ComboBoxVCSPreference: TComboBox;
@@ -139,6 +140,7 @@ begin
 
   ComboBoxAnnotationPosition.ItemIndex := Ord(LSettings.AnnotationPosition);
   CheckBoxShowInline.Checked := LSettings.ShowInline;
+  CheckBoxShowStatusbar.Checked := LSettings.ShowStatusbar;
 
   LabelHotkeyValue.Caption := LSettings.ToggleHotkey;
 
@@ -170,6 +172,7 @@ begin
 
   LSettings.AnnotationPosition := TDXBlameAnnotationPosition(ComboBoxAnnotationPosition.ItemIndex);
   LSettings.ShowInline := CheckBoxShowInline.Checked;
+  LSettings.ShowStatusbar := CheckBoxShowStatusbar.Checked;
 
   LSettings.VCSPreference := TDXBlameVCSPreference(ComboBoxVCSPreference.ItemIndex);
 

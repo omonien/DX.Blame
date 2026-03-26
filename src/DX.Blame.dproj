@@ -80,6 +80,7 @@
         <DCCReference Include="DX.Blame.Settings.pas"/>
         <DCCReference Include="DX.Blame.Formatter.pas"/>
         <DCCReference Include="DX.Blame.Renderer.pas"/>
+        <DCCReference Include="DX.Blame.Statusbar.pas"/>
         <DCCReference Include="DX.Blame.KeyBinding.pas"/>
         <DCCReference Include="DX.Blame.Navigation.pas"/>
         <DCCReference Include="DX.Blame.Settings.Form.pas">
