@@ -10,8 +10,8 @@ progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 6
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 17
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Der Entwickler sieht auf einen Blick, wer eine Codezeile zuletzt geaendert hat und wann, ohne die IDE verlassen zu muessen.
-**Current focus:** v1.2 Phase 12 ready to plan
+**Current focus:** v1.2 Phase 12 plan 01 complete — annotation positioning shipped
 
 ## Current Position
 
 Phase: 12 of 14 (Settings Foundation & Annotation Positioning)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-03-26 — Roadmap created for v1.2
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-03-26 — Completed plan 12-01: annotation positioning
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 17%
 
 ## Performance Metrics
 
@@ -39,11 +39,21 @@ Progress: [░░░░░░░░░░] 0%
 - Total plans: 22
 - Total LOC: 6,558 Delphi
 
+**v1.2 Phase 12-01:**
+- Duration: 25 min
+- Tasks: 2
+- Files modified: 4
+
 ## Accumulated Context
 
 ### Decisions
 
 All v1.0 and v1.1 decisions validated with outcomes — see PROJECT.md Key Decisions table.
+
+**Phase 12-01 decisions (2026-03-26):**
+- Max(caretX + padding, endOfLineX) pattern prevents annotation from jumping left of end-of-line
+- LLogicalLine = FCurrentLine guard ensures only caret line gets caret-anchored X in dsAllLines mode (DISP-04)
+- Separate [Display] INI section used (not [General]) to avoid key conflicts with DisplayScope
 
 ### Pending Todos
 
@@ -56,5 +66,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-26
-Stopped at: Roadmap created, ready to plan Phase 12
+Stopped at: Completed 12-01-PLAN.md (annotation positioning)
 Resume file: None
