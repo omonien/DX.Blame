@@ -68,11 +68,11 @@ Plans:
   2. Clicking the statusbar blame panel opens the commit detail popup
   3. Editor context menu shows "Enable/Disable Blame (Ctrl+Alt+B)" with a checkmark reflecting current state
   4. Navigating to a historical revision scrolls the editor to and centers the originating source line
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 13-01: Statusbar blame display and click handler
-- [ ] 13-02: Context menu toggle and auto-scroll
+- [ ] 13-01-PLAN.md — ShowStatusbar setting, TDXBlameStatusbar unit with panel lifecycle, GOnCaretMoved callback, click-to-popup
+- [ ] 13-02-PLAN.md — Context menu Enable/Disable Blame toggle, NavigateToRevision auto-scroll, DetachContextMenu bugfix
 
 ### Phase 14: IDE Options Migration
 **Goal**: All DX.Blame settings are accessible through the standard IDE Options dialog, and the legacy Tools menu entries are removed
