@@ -1,4 +1,4 @@
-/// <summary>
+﻿/// <summary>
 /// DX.Blame.Settings.Form
 /// VCL modal dialog for configuring all DX.Blame display options.
 /// </summary>
@@ -52,6 +52,8 @@ type
     GroupBoxDisplay: TGroupBox;
     RadioButtonCurrentLine: TRadioButton;
     RadioButtonAllLines: TRadioButton;
+    LabelAnnotationPosition: TLabel;
+    ComboBoxAnnotationPosition: TComboBox;
     GroupBoxVCS: TGroupBox;
     LabelVCSPreference: TLabel;
     ComboBoxVCSPreference: TComboBox;
@@ -134,6 +136,8 @@ begin
   else
     RadioButtonAllLines.Checked := True;
 
+  ComboBoxAnnotationPosition.ItemIndex := Ord(LSettings.AnnotationPosition);
+
   LabelHotkeyValue.Caption := LSettings.ToggleHotkey;
 
   ComboBoxVCSPreference.ItemIndex := Ord(LSettings.VCSPreference);
@@ -161,6 +165,8 @@ begin
     LSettings.DisplayScope := dsAllLines
   else
     LSettings.DisplayScope := dsCurrentLine;
+
+  LSettings.AnnotationPosition := TDXBlameAnnotationPosition(ComboBoxAnnotationPosition.ItemIndex);
 
   LSettings.VCSPreference := TDXBlameVCSPreference(ComboBoxVCSPreference.ItemIndex);
 

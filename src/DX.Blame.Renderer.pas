@@ -1,4 +1,4 @@
-/// <summary>
+﻿/// <summary>
 /// DX.Blame.Renderer
 /// INTACodeEditorEvents implementation for inline blame painting and click detection.
 /// </summary>
@@ -105,6 +105,7 @@ implementation
 
 uses
   System.Generics.Collections,
+  System.Math,
   DX.Blame.Settings,
   DX.Blame.Formatter,
   DX.Blame.Engine,
@@ -208,6 +209,7 @@ var
   LBlameData: TBlameData;
   LText: string;
   LAnnotationX: Integer;
+  LCaretX: Integer;
   LSavedFontStyle: TFontStyles;
   LSavedFontColor: TColor;
   LSavedBrushStyle: TBrushStyle;
@@ -309,6 +311,17 @@ begin
     // Compute X position: after visible text + 3 chars padding
     LAnnotationX := Context.LineState.VisibleTextRect.Right +
       (Context.CellSize.cx * 3);
+
+    // Caret-anchored: only for caret line, only when setting is active
+    if (BlameSettings.AnnotationPosition = apCaretColumn) and
+       (LLogicalLine = FCurrentLine) and
+       (Context.EditView <> nil) and
+       (Context.EditView.CursorPos.Col > 0) then
+    begin
+      LCaretX := (Context.EditView.CursorPos.Col - 1) * Context.CellSize.cx +
+        Context.LineState.VisibleTextRect.Left;
+      LAnnotationX := Max(LCaretX + (Context.CellSize.cx * 3), LAnnotationX);
+    end;
 
     // Store annotation position for click hit-testing
     if GAnnotationXByRow <> nil then
@@ -443,6 +456,7 @@ begin
 
   // Find the row that contains the click Y coordinate
   LFound := False;
+  LRowTop := 0;
   LAnnotationX := 0;
   LLogicalLine := 0;
 

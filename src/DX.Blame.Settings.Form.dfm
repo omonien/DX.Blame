@@ -3,7 +3,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   Top = 0
   BorderStyle = bsDialog
   Caption = 'DX Blame Settings'
-  ClientHeight = 535
+  ClientHeight = 580
   ClientWidth = 400
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -136,7 +136,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     Left = 12
     Top = 264
     Width = 376
-    Height = 65
+    Height = 110
     Caption = ' Display '
     TabOrder = 2
     object RadioButtonCurrentLine: TRadioButton
@@ -157,10 +157,29 @@ object FormDXBlameSettings: TFormDXBlameSettings
       Caption = 'All lines'
       TabOrder = 1
     end
+    object LabelAnnotationPosition: TLabel
+      Left = 16
+      Top = 56
+      Width = 110
+      Height = 15
+      Caption = 'Annotation Position:'
+    end
+    object ComboBoxAnnotationPosition: TComboBox
+      Left = 140
+      Top = 53
+      Width = 216
+      Height = 23
+      Style = csDropDownList
+      ItemIndex = 0
+      TabOrder = 2
+      Items.Strings = (
+        'End of line (default)'
+        'Caret-anchored')
+    end
   end
   object GroupBoxVCS: TGroupBox
     Left = 12
-    Top = 340
+    Top = 385
     Width = 376
     Height = 55
     Caption = ' Version Control '
@@ -188,7 +207,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   end
   object GroupBoxHotkey: TGroupBox
     Left = 12
-    Top = 405
+    Top = 450
     Width = 376
     Height = 70
     Caption = ' Hotkey '
@@ -222,7 +241,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   end
   object ButtonOK: TButton
     Left = 216
-    Top = 495
+    Top = 540
     Width = 80
     Height = 28
     Caption = 'OK'
@@ -233,7 +252,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   end
   object ButtonCancel: TButton
     Left = 308
-    Top = 495
+    Top = 540
     Width = 80
     Height = 28
     Cancel = True
