@@ -5,9 +5,9 @@
 ///
 /// <remarks>
 /// Handles all IDE integration: wizard registration, splash screen bitmap,
-/// Help > About entry, and Tools menu placeholder. All OTA registrations
-/// are cleaned up in reverse order during finalization to prevent access
-/// violations on BPL unload.
+/// Help > About entry, and IDE Options page (Tools > Options > Third Party > DX Blame).
+/// All OTA registrations are cleaned up in reverse order during finalization to prevent
+/// access violations on BPL unload.
 /// </remarks>
 ///
 /// <copyright>
@@ -21,7 +21,11 @@ interface
 
 procedure Register;
 
-/// <summary>Synchronizes the Enable Blame menu checkmark with current state.</summary>
+/// <summary>
+/// No-op stub kept for callback contract compatibility.
+/// OnBlameToggled (KeyBinding.pas) and GOnContextMenuToggle (Navigation.pas) reference
+/// this procedure; the Tools menu it previously synced was removed in v1.2 Phase 14.
+/// </summary>
 procedure SyncEnableBlameCheckmark;
 
 implementation
@@ -30,7 +34,6 @@ uses
   ToolsAPI,
   System.SysUtils,
   System.Classes,
-  Vcl.Menus,
   Winapi.Windows,
   DX.Blame.Version,
   DX.Blame.IDE.Notifier,
@@ -39,28 +42,14 @@ uses
   DX.Blame.Statusbar,
   DX.Blame.KeyBinding,
   DX.Blame.Settings,
-  DX.Blame.Settings.Form,
   DX.Blame.Settings.Options,
   DX.Blame.Navigation;
 
 var
   GWizardIndex: Integer = -1;
   GAboutPluginIndex: Integer = -1;
-  GMenuParentItem: TMenuItem = nil;
-  GEnableBlameItem: TMenuItem = nil;
-  GMenuHandler: TObject = nil;
   GStatusbar: TDXBlameStatusbar = nil;
   GAddInOptions: INTAAddInOptions = nil;
-
-type
-  /// <summary>
-  /// Simple handler object for the Enable Blame menu item OnClick event.
-  /// </summary>
-  TDXBlameMenuHandler = class
-  public
-    procedure ToggleBlame(Sender: TObject);
-    procedure ShowSettings(Sender: TObject);
-  end;
 
 type
   /// <summary>
@@ -98,119 +87,12 @@ begin
   // No-op for Phase 1 -- wizard exists for IDE registration only
 end;
 
-{ TDXBlameMenuHandler }
-
-procedure TDXBlameMenuHandler.ToggleBlame(Sender: TObject);
-{$IFDEF DEBUG}
-var
-  LMsgServices: IOTAMessageServices;
-{$ENDIF}
-begin
-  {$IFDEF DEBUG}
-  if Supports(BorlandIDEServices, IOTAMessageServices, LMsgServices) then
-    LMsgServices.AddTitleMessage('DX.Blame: ToggleBlame called, was=' + BoolToStr(BlameSettings.Enabled, True));
-  {$ENDIF}
-
-  BlameSettings.Enabled := not BlameSettings.Enabled;
-  BlameSettings.Save;
-  SyncEnableBlameCheckmark;
-  InvalidateAllEditors;
-end;
-
-procedure TDXBlameMenuHandler.ShowSettings(Sender: TObject);
-begin
-  TFormDXBlameSettings.ShowSettings;
-end;
-
-/// <summary>
-/// Creates the "DX Blame" submenu under the IDE Tools menu with
-/// "Enable Blame" (toggle) and "Settings..." (disabled placeholder).
-/// </summary>
-procedure CreateToolsMenu;
-var
-  LNTAServices: INTAServices;
-  LToolsMenu: TMenuItem;
-  LSubItem: TMenuItem;
-  LComponent: TComponent;
-  LCaption: string;
-  i: Integer;
-begin
-  if not Supports(BorlandIDEServices, INTAServices, LNTAServices) then
-    Exit;
-
-  // Find the IDE Tools menu by internal name first, then fall back to caption
-  LToolsMenu := nil;
-  LComponent := LNTAServices.MainMenu.FindComponent('ToolsMenu');
-  if (LComponent <> nil) and (LComponent is TMenuItem) then
-    LToolsMenu := TMenuItem(LComponent);
-
-  if LToolsMenu = nil then
-  begin
-    for i := 0 to LNTAServices.MainMenu.Items.Count - 1 do
-    begin
-      LCaption := StringReplace(LNTAServices.MainMenu.Items[i].Caption, '&', '', [rfReplaceAll]);
-      if SameText(LCaption, 'Tools') then
-      begin
-        LToolsMenu := LNTAServices.MainMenu.Items[i];
-        Break;
-      end;
-    end;
-  end;
-
-  if LToolsMenu = nil then
-    Exit;
-
-  // Create the menu handler for event callbacks
-  GMenuHandler := TDXBlameMenuHandler.Create;
-
-  {$IFDEF DEBUG}
-  if Supports(BorlandIDEServices, IOTAMessageServices) then
-    (BorlandIDEServices as IOTAMessageServices).AddTitleMessage(
-      'DX.Blame: menu handler created, OnClick assigned');
-  {$ENDIF}
-
-  GMenuParentItem := TMenuItem.Create(nil);
-  GMenuParentItem.Caption := 'DX Blame';
-
-  // Enable Blame -- checkbox-style toggle
-  LSubItem := TMenuItem.Create(GMenuParentItem);
-  LSubItem.Caption := 'Enable Blame';
-  LSubItem.Checked := BlameSettings.Enabled;
-  LSubItem.OnClick := TDXBlameMenuHandler(GMenuHandler).ToggleBlame;
-  GEnableBlameItem := LSubItem;
-  GMenuParentItem.Add(LSubItem);
-
-  // Settings... -- opens configuration dialog
-  LSubItem := TMenuItem.Create(GMenuParentItem);
-  LSubItem.Caption := 'Settings...';
-  LSubItem.OnClick := TDXBlameMenuHandler(GMenuHandler).ShowSettings;
-  GMenuParentItem.Add(LSubItem);
-
-  // Add as child of the Tools menu, not next to it
-  LToolsMenu.Add(GMenuParentItem);
-end;
-
-/// <summary>
-/// Removes the "DX Blame" menu and all children from the IDE.
-/// Children are freed automatically by the parent TMenuItem owner.
-/// </summary>
-procedure RemoveToolsMenu;
-begin
-  GEnableBlameItem := nil; // owned by GMenuParentItem, freed with it
-  FreeAndNil(GMenuParentItem);
-  FreeAndNil(GMenuHandler);
-end;
-
 procedure SyncEnableBlameCheckmark;
 begin
-  if GEnableBlameItem <> nil then
-    GEnableBlameItem.Checked := BlameSettings.Enabled;
+  // Tools menu removed in v1.2 Phase 14 -- no-op, kept for callback contract
+  // (OnBlameToggled in KeyBinding.pas, GOnContextMenuToggle in Navigation.pas)
 end;
 
-/// <summary>
-/// Called by the IDE when the design-time package is loaded.
-/// Registers the wizard, about box entry, and Tools menu items.
-/// </summary>
 /// <summary>
 /// Requests blame for all modules that were already open before the package loaded.
 /// IOTAIDENotifier.FileNotification(ofnFileOpened) does not fire for pre-existing
@@ -272,9 +154,6 @@ begin
       cDXBlameVersion
     );
   end;
-
-  // Create Tools menu placeholder
-  CreateToolsMenu;
 
   // Register IDE Options page (Tools > Options > Third Party > DX Blame)
   var LEnvOptSvc: INTAEnvironmentOptionsServices;
@@ -362,8 +241,7 @@ finalization
   // 5. Remove IDE notifiers (notifiers must stop before UI cleanup)
   UnregisterIDENotifiers;
 
-  // 6. Remove UI elements (menu items and handler)
-  RemoveToolsMenu;
+  // 6. (Tools menu removed in v1.2 — no cleanup needed)
 
   // 6.5. Unregister IDE Options page (must come before RemoveWizard — Pitfall 2 prevention)
   if GAddInOptions <> nil then
