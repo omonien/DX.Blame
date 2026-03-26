@@ -35,7 +35,16 @@ Der Entwickler sieht auf einen Blick, wer eine Codezeile zuletzt geändert hat u
 
 ### Active
 
-(None — define next milestone with `/gsd:new-milestone`)
+#### Current Milestone: v1.2 UX Polish & Settings
+
+**Goal:** Improve annotation display flexibility, add statusbar mode, streamline settings into IDE Options, and add context menu toggle.
+
+**Target features:**
+- Annotation X positioning (caret-anchored, configurable)
+- Statusbar display mode (independent of inline)
+- Context menu toggle with shortcut hint
+- Auto-scroll historical revision to source line
+- Embedded IDE Options page (INTAAddInOptions TFrame), remove Tools menu
 
 ### Out of Scope
 
@@ -90,4 +99,4 @@ Architecture: OTA plugin with async blame engine, IVCSProvider abstraction, thre
 | FRetryTimers parallel to FDebounceTimers | Separate dictionary for retry timers following identical lifecycle pattern | ✓ Good — consistent, easy to maintain |
 
 ---
-*Last updated: 2026-03-26 after v1.1 milestone completion*
+*Last updated: 2026-03-26 after v1.2 milestone start*
