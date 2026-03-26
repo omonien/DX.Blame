@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: UX Polish & Settings
 status: executing
-stopped_at: Completed 13-02-PLAN.md (Context menu toggle and auto-scroll)
-last_updated: "2026-03-26T22:22:48.590Z"
-last_activity: "2026-03-26 — Completed plan 13-01: Statusbar blame display with GOnCaretMoved callback"
+stopped_at: Completed 14-01-PLAN.md (IDE Options Migration - Frame and adapter)
+last_updated: "2026-03-26T22:46:21.000Z"
+last_activity: "2026-03-26 — Completed plan 14-01: TFrameDXBlameSettings + TDXBlameAddInOptions, package registered under Tools > Options > Third Party > DX Blame"
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
-  percent: 75
+  total_plans: 5
+  completed_plans: 5
+  percent: 88
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-26)
 
 ## Current Position
 
-Phase: 13 of 14 (Statusbar Display & Navigation)
-Plan: 1 of 2 in current phase — plan 1 complete
+Phase: 14 of 14 (IDE Options Migration)
+Plan: 1 of 1 in current phase — plan 1 complete
 Status: In Progress
-Last activity: 2026-03-26 — Completed plan 13-01: Statusbar blame display with GOnCaretMoved callback
+Last activity: 2026-03-26 — Completed plan 14-01: TFrameDXBlameSettings + INTAAddInOptions adapter under Tools > Options > Third Party > DX Blame
 
-Progress: [████████░░] 75%
+Progress: [█████████░] 88%
 
 ## Performance Metrics
 
@@ -54,6 +54,11 @@ Progress: [████████░░] 75%
 - Tasks: 1
 - Files modified: 8
 
+**v1.2 Phase 14-01:**
+- Duration: 5 min
+- Tasks: 2
+- Files modified: 6
+
 ## Accumulated Context
 
 ### Decisions
@@ -72,6 +77,10 @@ All v1.0 and v1.1 decisions validated with outcomes — see PROJECT.md Key Decis
 - [Phase 13-02]: GOnContextMenuToggle callback var in Navigation interface — identical pattern to OnBlameToggled in KeyBinding.pas, assigned in Registration.pas to avoid circular dependency
 - [Phase 13-02]: NavigateToRevision ALineNumber = 0 default param for backward-compatible scroll-to-source-line after OpenFile
 - [Phase 13-02]: DetachContextMenu: removed Assigned(GOriginalOnPopup) guard — nil is a valid restore target (Pitfall 3 fix)
+- [Phase 14-01]: FFrame niled at end of DialogClosed — IDE destroys TFrame immediately after callback (Pitfall 1 prevention)
+- [Phase 14-01]: GAddInOptions typed as INTAAddInOptions interface so ref-counting keeps adapter alive between Options dialog opens
+- [Phase 14-01]: GetArea returns empty string for standard Third Party node placement (Pitfall 3 prevention)
+- [Phase 14-01]: UnregisterAddInOptions at finalization step 6.5 before RemoveWizard (Pitfall 2 prevention)
 
 ### Pending Todos
 
@@ -83,6 +92,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-26T22:18:28.997Z
-Stopped at: Completed 13-02-PLAN.md (Context menu toggle and auto-scroll)
+Last session: 2026-03-26T22:46:21.000Z
+Stopped at: Completed 14-01-PLAN.md (IDE Options Migration - Frame and adapter)
 Resume file: None

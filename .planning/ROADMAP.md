@@ -107,4 +107,4 @@ Plans:
 | 11. Engine Project-Switch Lifecycle Fix | v1.1 | 1/1 | Complete | 2026-03-25 |
 | 12. Settings Foundation & Annotation Positioning | 2/2 | Complete    | 2026-03-26 | - |
 | 13. Statusbar Display & Navigation | 2/2 | Complete    | 2026-03-26 | - |
-| 14. IDE Options Migration | v1.2 | 0/2 | Not started | - |
+| 14. IDE Options Migration | 1/2 | In Progress|  | - |
