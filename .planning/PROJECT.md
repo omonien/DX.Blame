@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Ein Delphi IDE Plugin (Design-Time Package), das Git-Blame-Informationen inline im Code-Editor anzeigt. Wenn das aktuelle Projekt in einem Git-Repository liegt, wird am Ende der aktuellen Codezeile angezeigt, wer diese Zeile zuletzt bearbeitet hat — vergleichbar mit GitLens in VS Code. Klick auf die Annotation zeigt Commit-Details mit farbcodiertem Diff.
+Ein Delphi IDE Plugin (Design-Time Package), das Git- und Mercurial-Blame-Informationen inline im Code-Editor anzeigt. Annotation am Zeilenende oder caret-verankert, mit Statusbar-Anzeige, Kontextmenü-Toggle, und IDE Options Page. Klick auf Annotation oder Statusbar zeigt Commit-Details mit farbcodiertem Diff.
 
 ## Core Value
 
@@ -32,19 +32,17 @@ Der Entwickler sieht auf einen Blick, wer eine Codezeile zuletzt geändert hat u
 - ✓ Auto-detection of .git / .hg in project directory — v1.1
 - ✓ VCS preference prompt when both Git and Hg are present (remember per project) — v1.1
 - ✓ Settings dialog updated for VCS preference (Auto/Git/Mercurial) — v1.1
+- ✓ Caret-anchored annotation X positioning (configurable, dsAllLines guard) — v1.2
+- ✓ Independent inline/statusbar display toggles (ShowInline + ShowStatusbar) — v1.2
+- ✓ Statusbar blame display with click-to-popup (TDXBlameStatusbar + FreeNotification) — v1.2
+- ✓ Context menu "Enable/Disable Blame (Ctrl+Alt+B)" toggle with checkmark — v1.2
+- ✓ Auto-scroll historical revision to source line (NavigateToRevision + SetCursorPos/Center) — v1.2
+- ✓ IDE Options page under Third Party > DX Blame (INTAAddInOptions TFrame) — v1.2
+- ✓ Tools menu removed after IDE Options migration — v1.2
 
 ### Active
 
-#### Current Milestone: v1.2 UX Polish & Settings
-
-**Goal:** Improve annotation display flexibility, add statusbar mode, streamline settings into IDE Options, and add context menu toggle.
-
-**Target features:**
-- Annotation X positioning (caret-anchored, configurable)
-- Statusbar display mode (independent of inline)
-- Context menu toggle with shortcut hint
-- Auto-scroll historical revision to source line
-- Embedded IDE Options page (INTAAddInOptions TFrame), remove Tools menu
+(No active milestone — planning next)
 
 ### Out of Scope
 
@@ -54,12 +52,15 @@ Der Entwickler sieht auf einen Blick, wer eine Codezeile zuletzt geändert hat u
 - Andere VCS (SVN) — nur Git und Mercurial (IVCSProvider ist erweiterbar)
 - Real-time Blame bei jedem Tastendruck — Performance-Killer, sinnlos für uncommitted Änderungen
 - Mercurial GUI integration beyond TortoiseHg — TortoiseHg is the dominant Windows Mercurial client
+- Annotation heatmap coloring (color-code by commit age) — deferred to v1.3+
+- Configurable annotation format template (token-based like GitLens) — over-engineering for ~100 users
+- Per-project settings profiles — persistence complexity outweighs benefit
 
 ## Context
 
-Shipped v1.1 with 6,558 LOC Delphi across 22 production units.
+Shipped v1.2 with 6,544 LOC Delphi across 31 units.
 Tech stack: Delphi, Open Tools API, git CLI, hg CLI, TortoiseHg (thg).
-Architecture: OTA plugin with async blame engine, IVCSProvider abstraction, thread-safe cache, INTACodeEditorEvents renderer.
+Architecture: OTA plugin with async blame engine, IVCSProvider abstraction, thread-safe cache, INTACodeEditorEvents renderer, INTAAddInOptions settings page.
 
 - IVCSProvider interface with TGitProvider and THgProvider backends
 - TVCSDiscovery orchestrator for auto-detection of Git/Hg with dual-VCS prompt
@@ -70,6 +71,9 @@ Architecture: OTA plugin with async blame engine, IVCSProvider abstraction, thre
 - INTAEditServicesNotifier für Cursor-Tracking im Editor
 - Click-based popup (not hover) for commit details — EditorMouseDown detection
 - Modal diff dialog with RTF coloring and DPI-aware scaling
+- TDXBlameStatusbar with FreeNotification panel lifecycle and GOnCaretMoved callback
+- TFrameDXBlameSettings + TDXBlameAddInOptions for IDE Options integration
+- Caret-anchored annotation positioning with Max(caretX, endOfLineX) pattern
 
 ## Constraints
 
@@ -97,6 +101,12 @@ Architecture: OTA plugin with async blame engine, IVCSProvider abstraction, thre
 | Derive thg.exe from hg.exe path | Same directory lookup instead of separate registry/PATH search | ✓ Good — simple, TortoiseHg always co-locates binaries |
 | MD5-hashed project path for VCS choice | Persist dual-VCS choice without exposing file paths in INI | ✓ Good — deterministic, no path collisions |
 | FRetryTimers parallel to FDebounceTimers | Separate dictionary for retry timers following identical lifecycle pattern | ✓ Good — consistent, easy to maintain |
+| Max(caretX, endOfLineX) for caret-anchor | Prevents annotation from jumping left of end-of-line on short lines | ✓ Good — stable visual behavior |
+| GOnCaretMoved procedure variable | Piggybacking on EditorSetCaretPos avoids duplicate INTAEditServicesNotifier | ✓ Good — consistent with OnBlameToggled pattern |
+| GOnContextMenuToggle callback | Avoids circular dependency Navigation ↔ Registration | ✓ Good — identical pattern to OnBlameToggled |
+| TDXBlameStatusbar as TComponent | FreeNotification guards against edit window destruction AV | ✓ Good — safe panel lifecycle |
+| INTAAddInOptions thin adapter | TFrame with LoadFromSettings/SaveToSettings, adapter delegates | ✓ Good — clean separation, IDE manages frame lifetime |
+| SyncEnableBlameCheckmark as no-op stub | Keep procedure to satisfy callback contracts after Tools menu removal | ✓ Good — no compilation breaks |
 
 ---
-*Last updated: 2026-03-26 after v1.2 milestone start*
+*Last updated: 2026-03-27 after v1.2 milestone*

@@ -91,6 +91,50 @@
 
 ---
 
+## Milestone: v1.2 — UX Polish & Settings
+
+**Shipped:** 2026-03-27
+**Phases:** 3 | **Plans:** 6 | **Timeline:** 1 day
+
+### What Was Built
+- Caret-anchored annotation positioning with Max(caretX, endOfLineX) and dsAllLines caret-line guard
+- Independent inline/statusbar display toggles via orthogonal ShowInline + ShowStatusbar booleans
+- TDXBlameStatusbar with TComponent FreeNotification lifecycle, GOnCaretMoved callback, click-to-popup
+- Context menu "Enable/Disable Blame (Ctrl+Alt+B)" toggle with checkmark via GOnContextMenuToggle callback
+- Auto-scroll on historical revision navigation (NavigateToRevision + SetCursorPos/Center)
+- IDE Options page via TFrameDXBlameSettings + TDXBlameAddInOptions, replacing Tools menu entirely
+
+### What Worked
+- Auto-advance pipeline (plan → execute chaining) completed all 3 phases in a single session without manual intervention
+- Callback-variable pattern (GOnCaretMoved, GOnContextMenuToggle) reused from v1.0's OnBlameToggled — zero learning curve for avoiding circular dependencies
+- Balanced model profile (opus planning, sonnet execution) reduced cost while maintaining quality
+- Research agents caught the DetachContextMenu bug (nil handler restoration) before it reached execution
+
+### What Was Inefficient
+- SUMMARY.md files still lack `one_liner` frontmatter — same issue as v1.1, not fixed
+- Some ROADMAP.md plan checkboxes not marked `[x]` during execution — tracking artifact persists
+- TFormDXBlameSettings left compiled in BPL after Tools menu removal — dead code, should have been removed in Phase 14-02
+
+### Patterns Established
+- TComponent + FreeNotification for safe VCL panel lifecycle in OTA context
+- INTAAddInOptions thin adapter with FFrame nil'd in DialogClosed
+- Procedure variable callbacks for inter-unit decoupling (third instance of pattern)
+- Max(X, fallback) pattern for stable visual positioning
+
+### Key Lessons
+1. Auto-advance works well for low-risk milestones with clear phase dependencies — saves significant context-switch overhead
+2. FreeNotification is the correct VCL mechanism for guarding against parent destruction — simpler than custom event hooks
+3. INTAAddInOptions frame lifetime is IDE-managed — never store references beyond DialogClosed
+4. Removing menu items is simpler than expected when callback contracts are preserved as no-op stubs
+
+### Cost Observations
+- Model mix: balanced profile (opus planning, sonnet execution/verification)
+- 6 plans across 3 phases completed in ~1 hour
+- Auto-advance eliminated 5 manual /clear + paste cycles
+- Notable: Phase 14-02 (Tools menu removal) took 2 minutes — deletion-only plans are fast
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -99,6 +143,7 @@
 |-----------|----------|--------|------------|
 | v1.0 | 7 days | 5 | Initial milestone — established all patterns |
 | v1.1 | 3 days | 6 | Mirror pattern strategy, milestone audit → gap closure cycle |
+| v1.2 | 1 day | 3 | Auto-advance pipeline, balanced model profile |
 
 ### Cumulative Quality
 
@@ -106,6 +151,7 @@
 |-----------|-------|-------------|-----------------|
 | v1.0 | 28 | 14/14 requirements | 6 non-blocking |
 | v1.1 | 28 (unchanged) | 18/18 requirements | 2 non-blocking |
+| v1.2 | 28 (unchanged) | 10/10 requirements | 3 non-blocking |
 
 ### Top Lessons (Verified Across Milestones)
 
@@ -114,3 +160,5 @@
 3. Documentation should be verified against code, not just plan status
 4. Milestone audits catch cross-phase lifecycle bugs that phase-level verification misses
 5. Mirror pattern strategy (building new backend as structural clone of existing) keeps implementations consistent
+6. Callback-variable pattern scales well — used 5 times now for circular dependency avoidance
+7. Auto-advance pipeline is effective for low-risk milestones with clear dependencies

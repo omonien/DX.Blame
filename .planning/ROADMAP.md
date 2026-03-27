@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 DX.Blame: Inline Git Blame for Delphi IDE** — Phases 1-5 (shipped 2026-03-23)
 - ✅ **v1.1 Mercurial Support** — Phases 6-11 (shipped 2026-03-26)
-- **v1.2 UX Polish & Settings** — Phases 12-14 (in progress)
+- ✅ **v1.2 UX Polish & Settings** — Phases 12-14 (shipped 2026-03-27)
 
 ## Phases
 
@@ -35,62 +35,20 @@ Full details: [milestones/v1.1-ROADMAP.md](milestones/v1.1-ROADMAP.md)
 
 </details>
 
-### v1.2 UX Polish & Settings
+<details>
+<summary>v1.2 UX Polish & Settings (Phases 12-14) — SHIPPED 2026-03-27</summary>
 
-**Milestone Goal:** Improve annotation display flexibility, add statusbar mode, streamline settings into IDE Options, and add context menu toggle.
+- [x] Phase 12: Settings Foundation & Annotation Positioning (2/2 plans) — completed 2026-03-26
+- [x] Phase 13: Statusbar Display & Navigation (2/2 plans) — completed 2026-03-26
+- [x] Phase 14: IDE Options Migration (2/2 plans) — completed 2026-03-26
 
-- [x] **Phase 12: Settings Foundation & Annotation Positioning** - New settings properties and caret-anchored annotation rendering (completed 2026-03-26)
-- [x] **Phase 13: Statusbar Display & Navigation** - Statusbar blame panel, context menu toggle, and auto-scroll on revision navigation (completed 2026-03-26)
-- [x] **Phase 14: IDE Options Migration** - Extract settings into TFrame, register as IDE Options page, remove Tools menu (completed 2026-03-26)
+Full details: [milestones/v1.2-ROADMAP.md](milestones/v1.2-ROADMAP.md)
 
-## Phase Details
-
-### Phase 12: Settings Foundation & Annotation Positioning
-**Goal**: Annotations can be positioned relative to the caret instead of end-of-line, with inline and statusbar modes independently controllable
-**Depends on**: Phase 11 (v1.1 complete)
-**Requirements**: DISP-03, DISP-04, DISP-05
-**Success Criteria** (what must be TRUE):
-  1. User can switch annotation positioning from end-of-line to caret-anchored in settings
-  2. In all-lines mode with caret-anchored positioning, only the caret line's annotation follows the caret column while other lines remain end-of-line
-  3. User can independently enable/disable inline annotations and statusbar display (four combinations possible)
-**Plans**: 2 plans
-
-Plans:
-- [x] 12-01-PLAN.md — AnnotationPosition setting, caret-anchored X in PaintLine, settings UI
-- [ ] 12-02-PLAN.md — ShowInline toggle with renderer guard and settings UI
-
-### Phase 13: Statusbar Display & Navigation
-**Goal**: Users can see blame info in the statusbar and toggle blame from the context menu, with historical revision navigation scrolling to the source line
-**Depends on**: Phase 12
-**Requirements**: DISP-01, DISP-02, NAV-01, NAV-02
-**Success Criteria** (what must be TRUE):
-  1. Statusbar shows current line's blame info (author, relative time, summary) and updates when the cursor moves to a different line
-  2. Clicking the statusbar blame panel opens the commit detail popup
-  3. Editor context menu shows "Enable/Disable Blame (Ctrl+Alt+B)" with a checkmark reflecting current state
-  4. Navigating to a historical revision scrolls the editor to and centers the originating source line
-**Plans**: 2 plans
-
-Plans:
-- [ ] 13-01-PLAN.md — ShowStatusbar setting, TDXBlameStatusbar unit with panel lifecycle, GOnCaretMoved callback, click-to-popup
-- [ ] 13-02-PLAN.md — Context menu Enable/Disable Blame toggle, NavigateToRevision auto-scroll, DetachContextMenu bugfix
-
-### Phase 14: IDE Options Migration
-**Goal**: All DX.Blame settings are accessible through the standard IDE Options dialog, and the legacy Tools menu entries are removed
-**Depends on**: Phase 13
-**Requirements**: SETT-01, SETT-02, SETT-03
-**Success Criteria** (what must be TRUE):
-  1. User can navigate to Tools > Options > Third Party > DX.Blame and see a settings page
-  2. The Options page includes all settings: anchor mode, statusbar toggle, inline toggle, VCS preference, and all existing display settings
-  3. Tools > DX.Blame menu items (Settings dialog, Toggle) are removed from the IDE menu
-**Plans**: 2 plans
-
-Plans:
-- [ ] 14-01-PLAN.md — Settings frame (TFrameDXBlameSettings), INTAAddInOptions adapter, IDE Options registration
-- [ ] 14-02-PLAN.md — Tools menu removal (CreateToolsMenu, TDXBlameMenuHandler, menu vars deleted)
+</details>
 
 ## Progress
 
-**Execution Order:** Phase 12 > 13 > 14
+**Execution Order:** All phases complete.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -105,6 +63,6 @@ Plans:
 | 9. Mercurial Provider | v1.1 | 2/2 | Complete | 2026-03-24 |
 | 10. Settings and TortoiseHg Integration | v1.1 | 2/2 | Complete | 2026-03-24 |
 | 11. Engine Project-Switch Lifecycle Fix | v1.1 | 1/1 | Complete | 2026-03-25 |
-| 12. Settings Foundation & Annotation Positioning | 2/2 | Complete    | 2026-03-26 | - |
-| 13. Statusbar Display & Navigation | 2/2 | Complete    | 2026-03-26 | - |
-| 14. IDE Options Migration | 2/2 | Complete    | 2026-03-26 | - |
+| 12. Settings Foundation & Annotation Positioning | v1.2 | 2/2 | Complete | 2026-03-26 |
+| 13. Statusbar Display & Navigation | v1.2 | 2/2 | Complete | 2026-03-26 |
+| 14. IDE Options Migration | v1.2 | 2/2 | Complete | 2026-03-26 |

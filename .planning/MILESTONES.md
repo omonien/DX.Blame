@@ -1,5 +1,28 @@
 # Milestones
 
+## v1.2 UX Polish & Settings (Shipped: 2026-03-27)
+
+**Phases completed:** 3 phases, 6 plans
+**Timeline:** 1 day (2026-03-26)
+**Stats:** 30 files changed, +4,381/-196 lines, 6,544 LOC Delphi across 31 units
+
+**Key accomplishments:**
+- Caret-anchored annotation positioning with Max(caretX, endOfLineX) pattern and dsAllLines guard (DISP-03, DISP-04)
+- Independent inline/statusbar display toggles via orthogonal ShowInline + ShowStatusbar booleans (DISP-05)
+- Statusbar blame display with TDXBlameStatusbar (TComponent + FreeNotification lifecycle), GOnCaretMoved callback, and click-to-popup (DISP-01, DISP-02)
+- Context menu "Enable/Disable Blame (Ctrl+Alt+B)" toggle with checkmark via GOnContextMenuToggle callback (NAV-01)
+- Auto-scroll on historical revision navigation via NavigateToRevision ALineNumber + SetCursorPos/Center (NAV-02)
+- IDE Options page via TFrameDXBlameSettings + TDXBlameAddInOptions under Third Party, replacing Tools menu (SETT-01, SETT-02, SETT-03)
+
+**Tech debt (non-blocking):**
+- TFormDXBlameSettings remains compiled into BPL but never called (orphaned after Tools menu removal)
+- SyncEnableBlameCheckmark is a no-op stub (callback contracts preserved)
+- Statusbar attaches only to TopEditWindow (single-window limitation, documented)
+
+**Audit:** 10/10 requirements, 7/7 E2E flows, all passed
+
+---
+
 ## v1.1 Mercurial Support (Shipped: 2026-03-26)
 
 **Phases completed:** 6 phases, 11 plans, 22 tasks
