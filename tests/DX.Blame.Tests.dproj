@@ -37,9 +37,9 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <SanitizedProjectName>DX_Blame_Tests</SanitizedProjectName>
-        <DCC_UnitSearchPath>..\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_ExeOutput>..\build\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_DcuOutput>..\build\$(Platform)\$(Config)\dcu</DCC_DcuOutput>
+        <DCC_ExeOutput>..\build\$(Platform)\$(Config)</DCC_ExeOutput>
+        <DCC_UnitSearchPath>..\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
