@@ -81,7 +81,7 @@ end;
 
 function TDXBlameAddInOptions.GetCaption: string;
 begin
-  Result := 'DX Blame';
+  Result := 'DX.Blame';
 end;
 
 function TDXBlameAddInOptions.GetFrameClass: TCustomFrameClass;

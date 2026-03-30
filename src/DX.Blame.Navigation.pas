@@ -359,7 +359,8 @@ begin
   begin
     // Blame toggle with checkbox (always shown, does not require VCS)
     GEnableBlameItem := TMenuItem.Create(nil);
-    GEnableBlameItem.Caption := 'Blame'#9'Ctrl+Alt+B';
+    GEnableBlameItem.Caption := 'Inline Blaming enabled';
+    GEnableBlameItem.ShortCut := Vcl.Menus.ShortCut(Ord('B'), [ssCtrl, ssAlt]);
     GEnableBlameItem.Checked := BlameSettings.Enabled;
     GEnableBlameItem.OnClick := Self.OnToggleBlameClick;
     TPopupMenu(Sender).Items.Add(GEnableBlameItem);
