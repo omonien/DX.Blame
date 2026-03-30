@@ -75,9 +75,11 @@
         <DCCReference Include="DX.Blame.CommitDetail.pas"/>
         <DCCReference Include="DX.Blame.Popup.pas">
             <Form>DXBlamePopup</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DX.Blame.Diff.Form.pas">
             <Form>FormDXBlameDiff</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DX.Blame.Renderer.pas"/>
         <DCCReference Include="DX.Blame.Statusbar.pas"/>
@@ -85,11 +87,13 @@
         <DCCReference Include="DX.Blame.Navigation.pas"/>
         <DCCReference Include="DX.Blame.Settings.Frame.pas">
             <Form>FrameDXBlameSettings</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="DX.Blame.Settings.Options.pas"/>
         <DCCReference Include="DX.Blame.Settings.Form.pas">
             <Form>FormDXBlameSettings</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DX.Blame.Engine.pas"/>
         <DCCReference Include="DX.Blame.IDE.Notifier.pas"/>

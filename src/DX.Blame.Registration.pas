@@ -157,12 +157,12 @@ begin
   begin
     LAboutBmp := LoadBitmap(FindResourceHInstance(HInstance), 'DXBLAMESPLASH');
     GAboutPluginIndex := LAboutBoxServices.AddPluginInfo(
-      cDXBlameName,
-      cDXBlameDescription + sLineBreak + cDXBlameCopyright,
+      cDXBlameName + ' V' + cDXBlameVersion,
+      cDXBlameDescription + sLineBreak + sLineBreak + cDXBlameCopyright,
       LAboutBmp,
       False,
-      '',
-      cDXBlameVersion
+      'MIT License',
+      ''
     );
   end;
 
