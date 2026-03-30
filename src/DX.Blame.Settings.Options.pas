@@ -81,7 +81,9 @@ end;
 
 function TDXBlameAddInOptions.GetCaption: string;
 begin
-  Result := 'DX.Blame';
+  // ToolsAPI uses '.' as a hierarchy separator inside the options tree.
+  // U+2024 (One Dot Leader) is visually identical but avoids the split.
+  Result := 'DX'#$2024'Blame';
 end;
 
 function TDXBlameAddInOptions.GetFrameClass: TCustomFrameClass;
