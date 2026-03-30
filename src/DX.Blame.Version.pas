@@ -20,9 +20,9 @@ interface
 const
   cDXBlameMajorVersion = 1;
   cDXBlameMinorVersion = 2;
-  cDXBlameRelease = 0;
+  cDXBlameRelease = 1;
   cDXBlameBuild = 0;
-  cDXBlameVersion = '1.2.0.0';
+  cDXBlameVersion = '1.2.1.0';
   cDXBlameName = 'DX.Blame';
   cDXBlameDescription = 'VCS Blame for Delphi';
   cDXBlameCopyright = 'Copyright (c) 2026 Olaf Monien';
