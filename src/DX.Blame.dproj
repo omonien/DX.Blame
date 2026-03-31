@@ -39,6 +39,9 @@
         <DllSuffix>$(Auto)</DllSuffix>
         <GenDll>true</GenDll>
         <GenPackage>true</GenPackage>
+        <DCC_BplOutput>..\build\$(Platform)\$(Config)</DCC_BplOutput>
+        <DCC_DcpOutput>..\build\$(Platform)\$(Config)\dcu</DCC_DcpOutput>
+        <DCC_DcuOutput>..\build\$(Platform)\$(Config)\dcu</DCC_DcuOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>vcl;rtl;$(DCC_UsePackage)</DCC_UsePackage>
