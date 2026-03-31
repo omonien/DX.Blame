@@ -94,7 +94,8 @@ DX.Blame compiles from a single codebase on Delphi 12 and 13 using conditional c
    - **Component &gt; Install Packages &gt; Add...**
    - Navigate to `build\Win32\Debug\DX.Blame.bpl` (or the appropriate platform/config path)
    - Click **OK**
-
+     
+5. Add the output directory to the **IDE's Library Path**:
    To ensure the IDE can find the compiled files, you must add the build directory to the Library Path:
    - Go to Tools > Options.
    - Navigate to Language > Delphi > Library.
