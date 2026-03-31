@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/omonien/DX.Blame/releases/latest"><img src="https://img.shields.io/github/v/release/omonien/DX.Blame?style=flat-square&color=blue" alt="Latest Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/omonien/DX.Blame?style=flat-square" alt="License"></a>
-  <img src="https://img.shields.io/badge/Delphi-11%20%7C%2012%20%7C%2013-red?style=flat-square" alt="Delphi 11 | 12 | 13">
+  <img src="https://img.shields.io/badge/Delphi-12%20%7C%2013-red?style=flat-square" alt="Delphi 12 | 13">
   <img src="https://img.shields.io/badge/VCS-Git%20%7C%20Mercurial-orange?style=flat-square" alt="Git | Mercurial">
   <img src="https://img.shields.io/badge/platform-Windows-lightgrey?style=flat-square" alt="Windows">
 </p>
@@ -68,10 +68,14 @@ Works with **Git** and **Mercurial** repositories. Auto-detects the VCS in use.
 
 ## Requirements
 
-- **Delphi 11 Alexandria**, **Delphi 12 Athens**, or **Delphi 13**
+- **Delphi 12 Athens** or **Delphi 13**
 - **Git** installed and available in `PATH` (for Git repositories)
 - **Mercurial (hg)** installed and available in `PATH` (for Mercurial repositories)
 - Windows 10 or later
+
+### Delphi Version Compatibility
+
+DX.Blame compiles from a single codebase on Delphi 12 and 13 using conditional compilation (`{$IF CompilerVersion}`). Delphi 13-specific features (e.g. `INTACodeEditorEvents370` for click-consuming and caret tracking) are enabled automatically when building with Delphi 13. On Delphi 12, the plugin uses the standard `INTACodeEditorEvents` interface &mdash; all core functionality (inline blame, statusbar, commit details, diff dialog) works identically.
 
 ## Installation
 
