@@ -133,5 +133,6 @@ GTAGS
 *.fbpbrk    # Breakpoints
 *.fb8lck    # Lock files
 
-# Claude Code local settings
+# Claude Code
 .claude/settings.local.json
+.claude/worktrees/
