@@ -95,7 +95,15 @@ DX.Blame compiles from a single codebase on Delphi 12 and 13 using conditional c
    - Navigate to `build\Win32\Debug\DX.Blame.bpl` (or the appropriate platform/config path)
    - Click **OK**
 
-5. The plugin is now active. Open a file in a Git or Mercurial repository to see blame annotations.
+5. **Add the output directory to the IDE's Library Path**:
+   To ensure the IDE can find the compiled files, you must add the build directory to the Library Path:
+   - Go to Tools > Options.
+   - Navigate to Language > Delphi > Library.
+   - Select the applicable platform (e.g., Windows 32-bit).
+   - Add the absolute path of the build output folder to the Library path field.
+     Example: If the project is in C:\Projects\DX.Blame, add C:\Projects\DX.Blame\build\Win32\Debug.
+  
+6. The plugin is now active. Open a file in a Git or Mercurial repository to see blame annotations.
 
 ### Build Script
 
