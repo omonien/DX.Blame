@@ -1,4 +1,4 @@
-ï»¿/// <summary>
+﻿/// <summary>
 /// DX.Blame.Renderer.D13
 /// Delphi 13 renderer descendant adding INTACodeEditorEvents370 support.
 /// </summary>
@@ -27,6 +27,7 @@ interface
 {$IF CompilerVersion >= 37.0}
 
 uses
+  System.Classes,
   Vcl.Controls,
   ToolsAPI,
   ToolsAPI.Editor,
@@ -42,7 +43,7 @@ type
   protected
     { INTACodeEditorEvents — override base no-op; D13 uses 370 overload instead }
     procedure EditorMouseDown(const Editor: TWinControl;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer); overload;
     function AllowedEvents: TCodeEditorEvents; override;
     { INTACodeEditorEvents370 }
     procedure EditorMouseDown(const Editor: TWinControl;
@@ -63,9 +64,6 @@ type
 implementation
 
 {$IF CompilerVersion >= 37.0}
-
-uses
-  DX.Blame.Renderer;
 
 { TDXBlameRendererD13 }
 

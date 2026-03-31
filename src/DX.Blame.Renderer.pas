@@ -1,4 +1,4 @@
-ï»¿/// <summary>
+﻿/// <summary>
 /// DX.Blame.Renderer
 /// INTACodeEditorEvents implementation for inline blame painting and click detection.
 /// </summary>
