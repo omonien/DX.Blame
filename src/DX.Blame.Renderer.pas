@@ -483,9 +483,13 @@ end;
 procedure TDXBlameRenderer.EditorScrolled(const Editor: TWinControl;
   const Direction: TCodeEditorScrollDirection);
 begin
-  // Hide popup on scroll to prevent stale positioning
+  // Hide popup and reset hover state so the next hover
+  // recalculates screen coordinates from the fresh paint cycle
   if (GPopup <> nil) and GPopup.Visible then
     GPopup.Hide;
+  GHoverPopupLine := -1;
+  if GHoverCheckTimer <> nil then
+    GHoverCheckTimer.Enabled := False;
 end;
 
 procedure TDXBlameRenderer.EditorResized(const Editor: TWinControl);
