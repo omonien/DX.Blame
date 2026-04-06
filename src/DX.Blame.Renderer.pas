@@ -166,6 +166,8 @@ var
   GHoverCheckTimer: TTimer = nil;
   GHoverPopupLine: Integer = -1;
   GHoverAnnotationScreenRect: TRect;
+  // Tick count until which hover popup is suppressed (after scroll)
+  GScrollSuppressUntil: Cardinal = 0;
 
 function DeriveAnnotationColor: TColor;
 var
@@ -483,13 +485,15 @@ end;
 procedure TDXBlameRenderer.EditorScrolled(const Editor: TWinControl;
   const Direction: TCodeEditorScrollDirection);
 begin
-  // Hide popup and reset hover state so the next hover
-  // recalculates screen coordinates from the fresh paint cycle
+  // Close popup and suppress hover re-trigger for 500 ms so that
+  // EditorMouseMove (which fires immediately because the cursor is
+  // still over the annotation area) does not re-open it.
   if (GPopup <> nil) and GPopup.Visible then
     GPopup.Hide;
   GHoverPopupLine := -1;
   if GHoverCheckTimer <> nil then
     GHoverCheckTimer.Enabled := False;
+  GScrollSuppressUntil := GetTickCount + 500;
 end;
 
 procedure TDXBlameRenderer.EditorResized(const Editor: TWinControl);
@@ -633,6 +637,9 @@ begin
   if BlameSettings.PopupTrigger <> ptHover then
     Exit;
   if not BlameSettings.Enabled then
+    Exit;
+  // Suppress hover popup briefly after scroll to prevent flicker
+  if GetTickCount < GScrollSuppressUntil then
     Exit;
   if GAnnotationXByRow = nil then
     Exit;
