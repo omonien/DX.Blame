@@ -257,7 +257,11 @@ begin
   Left := LLeft;
   Top := LTop;
 
-  Show;
+  // Use SW_SHOWNOACTIVATE to avoid stealing keyboard focus from the editor.
+  // VCL's Show uses SW_SHOWNORMAL which activates the window despite
+  // WS_EX_NOACTIVATE in CreateParams.
+  Visible := True;
+  ShowWindow(Handle, SW_SHOWNOACTIVATE);
 end;
 
 procedure TDXBlamePopup.UpdateContent(const ALineInfo: TBlameLineInfo;
