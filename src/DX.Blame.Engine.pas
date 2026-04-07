@@ -56,7 +56,6 @@ type
     procedure HandleBlameError(const AFileName: string; const AError: string);
     procedure DoRequestBlame(ASender: TObject);
     procedure DoRetryBlame(ASender: TObject);
-    procedure LogToIDE(const AMessage: string);
     function IsSourceFile(const AFileName: string): Boolean;
     procedure CancelAllThreads;
     procedure ClearAllTimers;
@@ -117,7 +116,9 @@ uses
   DX.Blame.VCS.Discovery,
   DX.Blame.Git.Discovery,
   DX.Blame.Hg.Discovery,
-  DX.Blame.CommitDetail;
+  DX.Blame.CommitDetail,
+  DX.Blame.Logging,
+  DX.Blame.Settings;
 
 var
   GBlameEngine: TBlameEngine;
@@ -233,13 +234,19 @@ begin
     if not FVCSNotified then
     begin
       FVCSNotified := True;
-      LogToIDE('DX.Blame: No VCS repository detected. Blame features disabled.');
+      LogWarn('Engine', 'No VCS repository detected. Blame features disabled.');
     end;
     Exit;
   end;
 
   FVCSAvailable := True;
-  LogToIDE('DX.Blame: ' + FProvider.GetDisplayName + ' repository detected at ' + FRepoRoot);
+  if not BlameSettings.Enabled then
+  begin
+    BlameSettings.Enabled := True;
+    BlameSettings.Save;
+    LogInfo('Engine', 'Auto-enabled DX.Blame for detected repository');
+  end;
+  LogInfo('Engine', FProvider.GetDisplayName + ' repository detected at ' + FRepoRoot);
 end;
 
 procedure TBlameEngine.RequestBlame(const AFileName: string);
@@ -255,23 +262,17 @@ begin
 
   if not FVCSAvailable then
   begin
-    {$IFDEF DEBUG}
-    LogToIDE('DX.Blame: skip blame (VCS not available) ' + ExtractFileName(AFileName));
-    {$ENDIF}
+    LogDebug('Engine', 'Skip blame (VCS not available) ' + ExtractFileName(AFileName));
     Exit;
   end;
 
   if not IsSourceFile(AFileName) then
   begin
-    {$IFDEF DEBUG}
-    LogToIDE('DX.Blame: skip blame (not source/out of repo) ' + ExtractFileName(AFileName));
-    {$ENDIF}
+    LogDebug('Engine', 'Skip blame (not source/out of repo) ' + ExtractFileName(AFileName));
     Exit;
   end;
 
-  {$IFDEF DEBUG}
-  LogToIDE('DX.Blame: requesting blame for ' + ExtractFileName(AFileName));
-  {$ENDIF}
+  LogDebug('Engine', 'Requesting blame for ' + ExtractFileName(AFileName));
 
   LKey := LowerCase(AFileName);
 
@@ -422,10 +423,8 @@ var
 begin
   LKey := LowerCase(AFileName);
 
-  {$IFDEF DEBUG}
-  LogToIDE('DX.Blame: blame complete for ' + ExtractFileName(AFileName) +
+  LogDebug('Engine', 'Blame complete for ' + ExtractFileName(AFileName) +
     ' (' + IntToStr(Length(AData.Lines)) + ' lines)');
-  {$ENDIF}
 
   FLock.Enter;
   try
@@ -450,9 +449,7 @@ var
 begin
   LKey := LowerCase(AFileName);
 
-  {$IFDEF DEBUG}
-  LogToIDE('DX.Blame: blame error for ' + ExtractFileName(AFileName) + ': ' + Copy(AError, 1, 200));
-  {$ENDIF}
+  LogDebug('Engine', 'Blame error for ' + ExtractFileName(AFileName) + ': ' + Copy(AError, 1, 200));
 
   FLock.Enter;
   try
@@ -484,7 +481,7 @@ begin
   end
   else
   begin
-    LogToIDE('DX.Blame: blame failed for ' + AFileName + ': ' + AError);
+    LogError('Engine', 'Blame failed for ' + AFileName + ': ' + AError);
   end;
 end;
 
@@ -531,14 +528,6 @@ begin
 
   if LKey <> '' then
     RequestBlame(LKey);
-end;
-
-procedure TBlameEngine.LogToIDE(const AMessage: string);
-var
-  LMsgServices: IOTAMessageServices;
-begin
-  if Supports(BorlandIDEServices, IOTAMessageServices, LMsgServices) then
-    LMsgServices.AddTitleMessage(AMessage);
 end;
 
 function TBlameEngine.IsSourceFile(const AFileName: string): Boolean;

@@ -44,7 +44,7 @@
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
         <Manifest_File>(None)</Manifest_File>
-        <VerInfo_Keys>FileVersion=1.0.0.0</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=1.4.0.0</VerInfo_Keys>
         <VerInfo_Locale>1031</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
@@ -102,7 +102,7 @@
                 <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
                 <VersionInfo Name="AutoIncBuild">False</VersionInfo>
                 <VersionInfo Name="MajorVer">1</VersionInfo>
-                <VersionInfo Name="MinorVer">0</VersionInfo>
+                <VersionInfo Name="MinorVer">4</VersionInfo>
                 <VersionInfo Name="Release">0</VersionInfo>
                 <VersionInfo Name="Build">0</VersionInfo>
                 <VersionInfo Name="Debug">False</VersionInfo>
@@ -116,13 +116,13 @@
             <VersionInfoKeys>
                 <VersionInfoKeys Name="CompanyName">Olaf Monien</VersionInfoKeys>
                 <VersionInfoKeys Name="FileDescription">DX.Blame DUnitX Tests</VersionInfoKeys>
-                <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+                <VersionInfoKeys Name="FileVersion">1.4.0.0</VersionInfoKeys>
                 <VersionInfoKeys Name="InternalName">DX.Blame.Tests</VersionInfoKeys>
                 <VersionInfoKeys Name="LegalCopyright">Copyright (c) 2026 Olaf Monien</VersionInfoKeys>
                 <VersionInfoKeys Name="LegalTrademarks"/>
                 <VersionInfoKeys Name="OriginalFilename">DX.Blame.Tests.exe</VersionInfoKeys>
                 <VersionInfoKeys Name="ProductName">DX.Blame</VersionInfoKeys>
-                <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+                <VersionInfoKeys Name="ProductVersion">1.4.0.0</VersionInfoKeys>
                 <VersionInfoKeys Name="Comments">MIT License</VersionInfoKeys>
             </VersionInfoKeys>
         </BorlandProject>

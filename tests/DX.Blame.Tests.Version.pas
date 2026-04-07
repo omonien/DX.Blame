@@ -43,8 +43,6 @@ type
     procedure TestReleaseNonNegative;
     [Test]
     procedure TestBuildNonNegative;
-    [Test]
-    procedure TestAssembledVersionMatchesConstant;
   end;
 
 implementation
@@ -56,7 +54,10 @@ uses
 
 procedure TVersionTests.TestVersionStringValue;
 begin
-  Assert.AreEqual('1.0.0.0', cDXBlameVersion);
+  Assert.AreEqual(
+    Format('%d.%d.%d.%d', [cDXBlameMajorVersion, cDXBlameMinorVersion, cDXBlameRelease, cDXBlameBuild]),
+    DXBlameVersionString,
+    'DXBlameVersionString must match the numeric version parts');
 end;
 
 procedure TVersionTests.TestVersionStringFormat;
@@ -65,7 +66,7 @@ var
   LPart: string;
   LValue: Integer;
 begin
-  LParts := cDXBlameVersion.Split(['.']);
+  LParts := DXBlameVersionString.Split(['.']);
   Assert.AreEqual(Integer(4), Integer(Length(LParts)), 'Version must have four dot-separated parts');
   for LPart in LParts do
     Assert.IsTrue(TryStrToInt(LPart, LValue), 'Each part must be a valid integer: ' + LPart);
@@ -104,14 +105,6 @@ end;
 procedure TVersionTests.TestBuildNonNegative;
 begin
   Assert.IsTrue(cDXBlameBuild >= 0, 'Build must be non-negative');
-end;
-
-procedure TVersionTests.TestAssembledVersionMatchesConstant;
-var
-  LAssembled: string;
-begin
-  LAssembled := Format('%d.%d.%d.%d', [cDXBlameMajorVersion, cDXBlameMinorVersion, cDXBlameRelease, cDXBlameBuild]);
-  Assert.AreEqual(cDXBlameVersion, LAssembled, 'Assembled version must match cDXBlameVersion');
 end;
 
 initialization

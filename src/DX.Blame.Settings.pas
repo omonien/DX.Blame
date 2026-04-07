@@ -56,6 +56,7 @@ type
     FPopupTrigger: TDXBlamePopupTrigger;
     FShowInline: Boolean;
     FShowStatusbar: Boolean;
+    FEnableDebugLogging: Boolean;
   public
     constructor Create;
 
@@ -91,6 +92,8 @@ type
     property ShowInline: Boolean read FShowInline write FShowInline;
     /// <summary>When True, blame info for the current caret line is displayed in the IDE statusbar panel.</summary>
     property ShowStatusbar: Boolean read FShowStatusbar write FShowStatusbar;
+    /// <summary>When True, runtime debug logs are emitted to IDE messages.</summary>
+    property EnableDebugLogging: Boolean read FEnableDebugLogging write FEnableDebugLogging;
   end;
 
 /// <summary>Returns the singleton TDXBlameSettings instance (lazy-initialized).</summary>
@@ -139,6 +142,11 @@ begin
   FPopupTrigger := ptHover;
   FShowInline := True;
   FShowStatusbar := True;
+  {$IFDEF DEBUG}
+  FEnableDebugLogging := True;
+  {$ELSE}
+  FEnableDebugLogging := False;
+  {$ENDIF}
 end;
 
 class function TDXBlameSettings.GetSettingsPath: string;
@@ -205,6 +213,11 @@ begin
 
     FShowInline := LIni.ReadBool('Display', 'ShowInline', True);
     FShowStatusbar := LIni.ReadBool('Display', 'ShowStatusbar', True);
+    {$IFDEF DEBUG}
+    FEnableDebugLogging := LIni.ReadBool('Debug', 'EnableDebugLogging', True);
+    {$ELSE}
+    FEnableDebugLogging := LIni.ReadBool('Debug', 'EnableDebugLogging', False);
+    {$ENDIF}
   finally
     LIni.Free;
   end;
@@ -258,6 +271,7 @@ begin
 
     LIni.WriteBool('Display', 'ShowInline', FShowInline);
     LIni.WriteBool('Display', 'ShowStatusbar', FShowStatusbar);
+    LIni.WriteBool('Debug', 'EnableDebugLogging', FEnableDebugLogging);
   finally
     LIni.Free;
   end;

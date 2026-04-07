@@ -26,6 +26,9 @@ type
   TCommitDetailCacheTests = class
   private
     FCache: TCommitDetailCache;
+    FCallbackCalled: Boolean;
+    FCallbackDetail: TCommitDetail;
+    procedure HandleFetchComplete(const ADetail: TCommitDetail);
   public
     [Setup]
     procedure Setup;
@@ -38,6 +41,8 @@ type
     procedure TryGet_UnknownHash_ReturnsFalse;
     [Test]
     procedure Clear_RemovesAllEntries;
+    [Test]
+    procedure FetchCommitDetailAsync_WithNilProvider_CallsCallbackWithFetchedFalse;
   end;
 
 implementation
@@ -50,6 +55,7 @@ uses
 procedure TCommitDetailCacheTests.Setup;
 begin
   FCache := TCommitDetailCache.Create;
+  FCallbackCalled := False;
 end;
 
 procedure TCommitDetailCacheTests.TearDown;
@@ -104,6 +110,19 @@ begin
   Assert.IsFalse(
     FCache.TryGet('bbb2222222222222222222222222222222222222b', LResult),
     'TryGet should return False after Clear for second hash');
+end;
+
+procedure TCommitDetailCacheTests.HandleFetchComplete(const ADetail: TCommitDetail);
+begin
+  FCallbackCalled := True;
+  FCallbackDetail := ADetail;
+end;
+
+procedure TCommitDetailCacheTests.FetchCommitDetailAsync_WithNilProvider_CallsCallbackWithFetchedFalse;
+begin
+  FetchCommitDetailAsync(nil, 'abc123', 'C:\repo', 'src/unit.pas', HandleFetchComplete);
+  Assert.IsTrue(FCallbackCalled, 'Callback should be called for nil provider');
+  Assert.IsFalse(FCallbackDetail.Fetched, 'Fetched should be False for nil provider');
 end;
 
 initialization

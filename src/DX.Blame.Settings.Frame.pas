@@ -64,6 +64,7 @@ type
     GroupBoxHotkey: TGroupBox;
     LabelHotkeyValue: TLabel;
     LabelHotkeyInfo: TLabel;
+    CheckBoxEnableDebugLogging: TCheckBox;
     ButtonResetDefaults: TButton;
     ColorDialog: TColorDialog;
     procedure RadioButtonCustomColorClick(Sender: TObject);
@@ -120,6 +121,7 @@ begin
   ComboBoxPopupTrigger.ItemIndex := Ord(LSettings.PopupTrigger);
   CheckBoxShowInline.Checked := LSettings.ShowInline;
   CheckBoxShowStatusbar.Checked := LSettings.ShowStatusbar;
+  CheckBoxEnableDebugLogging.Checked := LSettings.EnableDebugLogging;
 
   LabelHotkeyValue.Caption := LSettings.ToggleHotkey;
 
@@ -148,6 +150,7 @@ begin
   LSettings.PopupTrigger := TDXBlamePopupTrigger(ComboBoxPopupTrigger.ItemIndex);
   LSettings.ShowInline := CheckBoxShowInline.Checked;
   LSettings.ShowStatusbar := CheckBoxShowStatusbar.Checked;
+  LSettings.EnableDebugLogging := CheckBoxEnableDebugLogging.Checked;
 
   LSettings.VCSPreference := TDXBlameVCSPreference(ComboBoxVCSPreference.ItemIndex);
 

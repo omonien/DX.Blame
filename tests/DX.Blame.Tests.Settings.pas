@@ -52,6 +52,10 @@ type
     procedure TestDiffDialogHeight_DefaultsTo600;
     [Test]
     procedure TestDiffDialogSize_RoundTrips;
+    [Test]
+    procedure TestEnableDebugLogging_DefaultMatchesBuildConfig;
+    [Test]
+    procedure TestEnableDebugLogging_RoundTrips;
   end;
 
 implementation
@@ -97,6 +101,7 @@ begin
     LIni.WriteBool('Appearance', 'UseCustomColor', FSettings.UseCustomColor);
     LIni.WriteInteger('Appearance', 'CustomColor', Integer(FSettings.CustomColor));
     LIni.WriteString('Hotkey', 'ToggleBlame', FSettings.ToggleHotkey);
+    LIni.WriteBool('Debug', 'EnableDebugLogging', FSettings.EnableDebugLogging);
   finally
     LIni.Free;
   end;
@@ -110,6 +115,11 @@ begin
   Assert.IsFalse(FSettings.ShowSummary, 'ShowSummary should default to False');
   Assert.AreEqual(80, FSettings.MaxLength, 'MaxLength should default to 80');
   Assert.IsFalse(FSettings.UseCustomColor, 'UseCustomColor should default to False');
+  {$IFDEF DEBUG}
+  Assert.IsTrue(FSettings.EnableDebugLogging, 'EnableDebugLogging should default to True in Debug');
+  {$ELSE}
+  Assert.IsFalse(FSettings.EnableDebugLogging, 'EnableDebugLogging should default to False in Release');
+  {$ENDIF}
 end;
 
 procedure TSettingsTests.TestSaveLoadRoundTrip;
@@ -125,6 +135,7 @@ begin
   FSettings.UseCustomColor := True;
   FSettings.CustomColor := clRed;
   FSettings.ToggleHotkey := 'Ctrl+Shift+G';
+  FSettings.EnableDebugLogging := False;
 
   // Save to temp INI
   SaveToTemp;
@@ -151,6 +162,11 @@ begin
       LLoaded.UseCustomColor := LIni.ReadBool('Appearance', 'UseCustomColor', False);
       LLoaded.CustomColor := TColor(LIni.ReadInteger('Appearance', 'CustomColor', Integer(clGray)));
       LLoaded.ToggleHotkey := LIni.ReadString('Hotkey', 'ToggleBlame', 'Ctrl+Alt+B');
+      {$IFDEF DEBUG}
+      LLoaded.EnableDebugLogging := LIni.ReadBool('Debug', 'EnableDebugLogging', True);
+      {$ELSE}
+      LLoaded.EnableDebugLogging := LIni.ReadBool('Debug', 'EnableDebugLogging', False);
+      {$ENDIF}
     finally
       LIni.Free;
     end;
@@ -163,6 +179,7 @@ begin
     Assert.IsTrue(LLoaded.UseCustomColor, 'UseCustomColor round-trip failed');
     Assert.AreEqual(Integer(clRed), Integer(LLoaded.CustomColor), 'CustomColor round-trip failed');
     Assert.AreEqual('Ctrl+Shift+G', LLoaded.ToggleHotkey, 'ToggleHotkey round-trip failed');
+    Assert.IsFalse(LLoaded.EnableDebugLogging, 'EnableDebugLogging round-trip failed');
   finally
     LLoaded.Free;
   end;
@@ -242,6 +259,43 @@ begin
 
     Assert.AreEqual(1024, LLoaded.DiffDialogWidth, 'DiffDialogWidth round-trip failed');
     Assert.AreEqual(768, LLoaded.DiffDialogHeight, 'DiffDialogHeight round-trip failed');
+  finally
+    LLoaded.Free;
+  end;
+end;
+
+procedure TSettingsTests.TestEnableDebugLogging_DefaultMatchesBuildConfig;
+begin
+  {$IFDEF DEBUG}
+  Assert.IsTrue(FSettings.EnableDebugLogging, 'Debug build should default logging to enabled');
+  {$ELSE}
+  Assert.IsFalse(FSettings.EnableDebugLogging, 'Release build should default logging to disabled');
+  {$ENDIF}
+end;
+
+procedure TSettingsTests.TestEnableDebugLogging_RoundTrips;
+var
+  LLoaded: TDXBlameSettings;
+  LIni: TIniFile;
+begin
+  FSettings.EnableDebugLogging := not FSettings.EnableDebugLogging;
+  SaveToTemp;
+
+  LLoaded := TDXBlameSettings.Create;
+  try
+    LIni := TIniFile.Create(FTempIniPath);
+    try
+      {$IFDEF DEBUG}
+      LLoaded.EnableDebugLogging := LIni.ReadBool('Debug', 'EnableDebugLogging', True);
+      {$ELSE}
+      LLoaded.EnableDebugLogging := LIni.ReadBool('Debug', 'EnableDebugLogging', False);
+      {$ENDIF}
+    finally
+      LIni.Free;
+    end;
+
+    Assert.AreEqual(FSettings.EnableDebugLogging, LLoaded.EnableDebugLogging,
+      'EnableDebugLogging should round-trip through INI');
   finally
     LLoaded.Free;
   end;

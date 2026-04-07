@@ -97,7 +97,8 @@ uses
   ToolsAPI,
   ToolsAPI.Editor,
   DX.Blame.Engine,
-  DX.Blame.Diff.Form;
+  DX.Blame.Diff.Form,
+  DX.Blame.Logging;
 
 const
   // Dark theme colors
@@ -163,9 +164,13 @@ begin
   begin
     MessageMemo.Text := ADetail.FullMessage;
     CommitDetailCache.Store(FFullHash, ADetail);
+    LogDebug('Popup', 'Commit details loaded for ' + Copy(FFullHash, 1, 7));
   end
   else
+  begin
     MessageMemo.Text := '(Failed to fetch commit details)';
+    LogWarn('Popup', 'Failed to load commit details for ' + Copy(FFullHash, 1, 7));
+  end;
 end;
 
 procedure TDXBlamePopup.ShowForCommit(const ALineInfo: TBlameLineInfo;

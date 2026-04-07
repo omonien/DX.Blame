@@ -81,7 +81,8 @@ uses
   DX.Blame.VCS.Provider,
   DX.Blame.Engine,
   DX.Blame.Settings,
-  DX.Blame.Formatter;
+  DX.Blame.Formatter,
+  DX.Blame.Logging;
 
 const
   cMaxDiffLines = 5000;
@@ -154,9 +155,14 @@ begin
       LoadDiffIntoRichEdit(FFullDiff)
     else
       LoadDiffIntoRichEdit(FFileDiff);
+    LogDebug('DiffForm', 'Commit diff loaded for ' + Copy(FCommitHash, 1, 7));
   end
   else
+  begin
     MemoMessage.Text := '(Failed to fetch commit details)';
+    LoadDiffIntoRichEdit('');
+    LogWarn('DiffForm', 'Failed to load commit diff for ' + Copy(FCommitHash, 1, 7));
+  end;
 end;
 
 procedure TFormDXBlameDiff.DoToggleScopeClick(ASender: TObject);

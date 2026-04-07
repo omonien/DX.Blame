@@ -53,6 +53,7 @@ contains
   DX.Blame.VCS.Discovery in 'DX.Blame.VCS.Discovery.pas',
   DX.Blame.Cache in 'DX.Blame.Cache.pas',
   DX.Blame.Settings in 'DX.Blame.Settings.pas',
+  DX.Blame.Logging in 'DX.Blame.Logging.pas',
   DX.Blame.Formatter in 'DX.Blame.Formatter.pas',
   DX.Blame.CommitDetail in 'DX.Blame.CommitDetail.pas',
   DX.Blame.Popup in 'DX.Blame.Popup.pas' {DXBlamePopup},

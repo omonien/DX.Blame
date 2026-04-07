@@ -45,6 +45,7 @@ uses
   {$IFEND}
   DX.Blame.Statusbar,
   DX.Blame.KeyBinding,
+  DX.Blame.Logging,
   DX.Blame.Settings,
   DX.Blame.Settings.Options,
   DX.Blame.Navigation;
@@ -178,6 +179,8 @@ begin
   if GDeferredInitDone then
     Exit;
 
+  LogDebug('Lifecycle', 'TryDeferredInit started');
+
   // Initialize blame engine if not done yet
   if not BlameEngine.VCSAvailable then
   begin
@@ -209,6 +212,7 @@ begin
   BlameAlreadyOpenFiles;
 
   GDeferredInitDone := True;
+  LogInfo('Lifecycle', 'Deferred initialization completed');
 end;
 
 { TDXBlameStartupHelper }
@@ -249,6 +253,7 @@ var
   LModuleServices: IOTAModuleServices;
   LProject: IOTAProject;
 begin
+  LogInfo('Lifecycle', 'Register start');
   // Register wizard
   if Supports(BorlandIDEServices, IOTAWizardServices, LWizardServices) then
     GWizardIndex := LWizardServices.AddWizard(TDXBlameWizard.Create);
@@ -258,7 +263,7 @@ begin
   begin
     LAboutBmp := LoadBitmap(FindResourceHInstance(HInstance), 'DXBLAMESPLASH');
     GAboutPluginIndex := LAboutBoxServices.AddPluginInfo(
-      cDXBlameName + ' V' + cDXBlameVersion,
+      cDXBlameName + ' V' + DXBlameVersionString,
       cDXBlameDescription + sLineBreak + sLineBreak + cDXBlameCopyright,
       LAboutBmp,
       False,
@@ -330,7 +335,9 @@ begin
     GStartupTimer.Interval := 500;
     GStartupTimer.OnTimer := GStartupHelper.OnStartupTimer;
     GStartupTimer.Enabled := True;
+    LogDebug('Lifecycle', 'Deferred startup timer enabled');
   end;
+  LogInfo('Lifecycle', 'Register completed');
 end;
 
 initialization
@@ -340,7 +347,7 @@ initialization
   if Assigned(SplashScreenServices) then
   begin
     SplashScreenServices.AddPluginBitmap(
-      cDXBlameName + ' V' + cDXBlameVersion,
+      cDXBlameName + ' V' + DXBlameVersionString,
       LoadBitmap(FindResourceHInstance(HInstance), 'DXBLAMESPLASH'),
       False,
       cDXBlameDescription
@@ -348,6 +355,7 @@ initialization
   end;
 
 finalization
+  LogInfo('Lifecycle', 'Finalization start');
   // Cancel startup timer if still running
   FreeAndNil(GStartupTimer);
   FreeAndNil(GStartupHelper);
@@ -398,5 +406,6 @@ finalization
       (BorlandIDEServices as IOTAAboutBoxServices).RemovePluginInfo(GAboutPluginIndex);
 
   // BlameEngine singleton is freed in DX.Blame.Engine finalization
+  LogInfo('Lifecycle', 'Finalization completed');
 
 end.

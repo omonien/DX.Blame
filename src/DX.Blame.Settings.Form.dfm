@@ -3,8 +3,8 @@ object FormDXBlameSettings: TFormDXBlameSettings
   Top = 0
   BorderStyle = bsDialog
   Caption = 'DX Blame Settings'
-  ClientHeight = 640
-  ClientWidth = 400
+  ClientHeight = 745
+  ClientWidth = 500
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   object GroupBoxFormat: TGroupBox
     Left = 12
     Top = 12
-    Width = 376
+    Width = 476
     Height = 145
     Caption = ' Format '
     TabOrder = 0
@@ -38,7 +38,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object CheckBoxShowAuthor: TCheckBox
       Left = 16
       Top = 24
-      Width = 340
+      Width = 444
       Height = 17
       Caption = 'Show Author'
       TabOrder = 0
@@ -46,7 +46,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object ComboBoxDateFormat: TComboBox
       Left = 100
       Top = 49
-      Width = 256
+      Width = 356
       Height = 23
       Style = csDropDownList
       ItemIndex = 0
@@ -58,7 +58,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object CheckBoxShowSummary: TCheckBox
       Left = 16
       Top = 84
-      Width = 340
+      Width = 444
       Height = 17
       Caption = 'Show Commit Summary'
       TabOrder = 2
@@ -87,7 +87,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   object GroupBoxAppearance: TGroupBox
     Left = 12
     Top = 168
-    Width = 376
+    Width = 476
     Height = 85
     Caption = ' Appearance '
     TabOrder = 1
@@ -135,7 +135,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   object GroupBoxDisplay: TGroupBox
     Left = 12
     Top = 264
-    Width = 376
+    Width = 476
     Height = 160
     Caption = ' Display '
     TabOrder = 2
@@ -149,7 +149,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object ComboBoxAnnotationPosition: TComboBox
       Left = 140
       Top = 21
-      Width = 216
+      Width = 316
       Height = 23
       Style = csDropDownList
       ItemIndex = 0
@@ -168,7 +168,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object ComboBoxPopupTrigger: TComboBox
       Left = 140
       Top = 53
-      Width = 216
+      Width = 316
       Height = 23
       Style = csDropDownList
       ItemIndex = 0
@@ -180,7 +180,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object CheckBoxShowInline: TCheckBox
       Left = 16
       Top = 88
-      Width = 340
+      Width = 444
       Height = 17
       Caption = 'Show inline annotations'
       Checked = True
@@ -190,7 +190,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object CheckBoxShowStatusbar: TCheckBox
       Left = 16
       Top = 112
-      Width = 340
+      Width = 444
       Height = 17
       Caption = 'Show in Statusbar'
       Checked = True
@@ -201,7 +201,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
   object GroupBoxVCS: TGroupBox
     Left = 12
     Top = 435
-    Width = 376
+    Width = 476
     Height = 55
     Caption = ' Version Control '
     TabOrder = 3
@@ -215,7 +215,7 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object ComboBoxVCSPreference: TComboBox
       Left = 100
       Top = 19
-      Width = 256
+      Width = 356
       Height = 23
       Style = csDropDownList
       ItemIndex = 0
@@ -229,8 +229,8 @@ object FormDXBlameSettings: TFormDXBlameSettings
   object GroupBoxHotkey: TGroupBox
     Left = 12
     Top = 500
-    Width = 376
-    Height = 70
+    Width = 476
+    Height = 122
     Caption = ' Hotkey '
     TabOrder = 4
     object LabelHotkeyValue: TLabel
@@ -249,46 +249,65 @@ object FormDXBlameSettings: TFormDXBlameSettings
     object LabelHotkeyInfo: TLabel
       Left = 16
       Top = 44
-      Width = 216
-      Height = 15
-      Caption = 'Requires IDE restart to change'
+      Width = 444
+      Height = 68
+      Anchors = [akLeft, akTop, akRight]
+      Caption = 
+        'The shortcut is fixed in the plugin (Ctrl+Alt+B). Reassigning it is not supported in this release. In Tools > Options > Editor > Key Mappings you can only enable or disable the "DX Blame Toggle" module and change its order in the list—not the key combination. This page shows the default for reference.'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clGrayText
       Font.Height = -12
       Font.Name = 'Segoe UI'
       Font.Style = [fsItalic]
       ParentFont = False
+      WordWrap = True
+    end
+  end
+  object GroupBoxDiagnostics: TGroupBox
+    Left = 12
+    Top = 630
+    Width = 476
+    Height = 55
+    Caption = ' Diagnostics '
+    TabOrder = 5
+    object CheckBoxEnableDebugLogging: TCheckBox
+      Left = 16
+      Top = 24
+      Width = 444
+      Height = 17
+      Caption = 'Enable debug logging'
+      TabOrder = 0
     end
   end
   object ButtonResetDefaults: TButton
     Left = 12
-    Top = 596
+    Top = 701
     Width = 120
     Height = 28
     Caption = 'Reset to Defaults'
-    TabOrder = 5
+    TabOrder = 6
     OnClick = ButtonResetDefaultsClick
   end
   object ButtonOK: TButton
-    Left = 216
-    Top = 596
+    Left = 320
+    Top = 701
     Width = 80
     Height = 28
     Caption = 'OK'
     Default = True
     ModalResult = 1
-    TabOrder = 6
+    TabOrder = 7
     OnClick = ButtonOKClick
   end
   object ButtonCancel: TButton
-    Left = 308
-    Top = 596
+    Left = 408
+    Top = 701
     Width = 80
     Height = 28
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 7
+    TabOrder = 8
     OnClick = ButtonCancelClick
   end
   object ColorDialog: TColorDialog

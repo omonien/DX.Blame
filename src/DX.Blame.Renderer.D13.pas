@@ -27,11 +27,13 @@ interface
 {$IF CompilerVersion >= 37.0}
 
 uses
+  System.SysUtils,
   System.Classes,
   Vcl.Controls,
   ToolsAPI,
   ToolsAPI.Editor,
-  DX.Blame.Renderer;
+  DX.Blame.Renderer,
+  DX.Blame.Logging;
 
 type
   /// <summary>
@@ -115,15 +117,28 @@ end;
 
 procedure TDXBlameRendererD13.EditorSetCaretPos(const Editor: TWinControl;
   X, Y: Integer);
+var
+  LEditorServices: IOTAEditorServices;
+  LTopView: IOTAEditView;
+  LLine: Integer;
 begin
-  // Y is view-relative (row on screen), NOT a logical line number.
-  // We only use this event to trigger a repaint; the actual logical
-  // caret line is read from EditView.CursorPos.Line in PaintLine.
   InvalidateAllEditors;
-  // Notify statusbar of caret movement using FCurrentLine from the last paint
-  // cycle. FCurrentLine may lag one paint cycle, which is imperceptible.
+
+  // Read the current logical line directly from the active top view to avoid
+  // one repaint-cycle lag after Enter/newline moves.
+  if not Supports(BorlandIDEServices, IOTAEditorServices, LEditorServices) then
+    Exit;
+  LTopView := LEditorServices.TopView;
+  if (LTopView = nil) or (LTopView.Buffer = nil) then
+    Exit;
+
+  FCurrentFileName := LTopView.Buffer.FileName;
+  LLine := LTopView.CursorPos.Line;
+  FCurrentLine := LLine;
+
+  LogDebug('RendererD13', 'Caret moved to line ' + IntToStr(LLine));
   if Assigned(GOnCaretMoved) and (FCurrentFileName <> '') then
-    GOnCaretMoved(FCurrentFileName, FCurrentLine);
+    GOnCaretMoved(FCurrentFileName, LLine);
 end;
 
 {$IFEND}

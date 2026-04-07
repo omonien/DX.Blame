@@ -35,7 +35,8 @@ uses
   System.Classes,
   System.Generics.Collections,
   ToolsAPI,
-  DX.Blame.Engine;
+  DX.Blame.Engine,
+  DX.Blame.Logging;
 
 type
   /// <summary>
@@ -129,6 +130,7 @@ begin
   case NotifyCode of
     ofnFileOpened:
       begin
+        LogDebug('IDE', 'File opened: ' + FileName);
         BlameEngine.RequestBlame(FileName);
 
         // Attach module notifier for save detection
@@ -151,6 +153,7 @@ begin
 
     ofnFileClosing:
       begin
+        LogDebug('IDE', 'File closing: ' + FileName);
         BlameEngine.CancelAndRemove(FileName);
 
         // Detach module notifier
@@ -169,6 +172,7 @@ begin
 
     ofnProjectDesktopLoad:
       begin
+        LogInfo('IDE', 'Project switched: ' + FileName);
         BlameEngine.OnProjectSwitch(ExtractFileDir(FileName));
       end;
   end;
@@ -194,6 +198,7 @@ begin
 
   if Supports(BorlandIDEServices, IOTAServices, LServices) then
     GIDENotifierIndex := LServices.AddNotifier(TDXBlameIDENotifier.Create);
+  LogInfo('IDE', 'IDE notifiers registered');
 end;
 
 procedure UnregisterIDENotifiers;
@@ -228,6 +233,7 @@ begin
       LServices.RemoveNotifier(GIDENotifierIndex);
     GIDENotifierIndex := -1;
   end;
+  LogInfo('IDE', 'IDE notifiers unregistered');
 end;
 
 end.

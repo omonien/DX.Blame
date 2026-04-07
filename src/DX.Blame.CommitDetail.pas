@@ -177,25 +177,33 @@ var
   LOnComplete: TCommitDetailCompleteEvent;
 begin
   LOnComplete := FOnComplete;
+  LDetail.Fetched := False;
 
-  // Fetch full commit message
-  if FProvider.GetCommitMessage(FRepoRoot, FCommitHash, LOutput) then
-    LDetail.FullMessage := Trim(LOutput);
+  try
+    if FProvider = nil then
+      Exit;
 
-  if Terminated then
-    Exit;
+    // Fetch full commit message
+    if FProvider.GetCommitMessage(FRepoRoot, FCommitHash, LOutput) then
+      LDetail.FullMessage := Trim(LOutput);
 
-  // Fetch file-specific diff
-  if FRelativeFilePath <> '' then
-    FProvider.GetFileDiff(FRepoRoot, FCommitHash, FRelativeFilePath, LDetail.FileDiff);
+    if Terminated then
+      Exit;
 
-  if Terminated then
-    Exit;
+    // Fetch file-specific diff
+    if FRelativeFilePath <> '' then
+      FProvider.GetFileDiff(FRepoRoot, FCommitHash, FRelativeFilePath, LDetail.FileDiff);
 
-  // Fetch full commit diff
-  FProvider.GetFullDiff(FRepoRoot, FCommitHash, LDetail.FullDiff);
+    if Terminated then
+      Exit;
 
-  LDetail.Fetched := True;
+    // Fetch full commit diff
+    FProvider.GetFullDiff(FRepoRoot, FCommitHash, LDetail.FullDiff);
+    LDetail.Fetched := True;
+  except
+    on Exception do
+      LDetail.Fetched := False;
+  end;
 
   TThread.Queue(nil,
     procedure
@@ -212,7 +220,18 @@ procedure FetchCommitDetailAsync(AProvider: IVCSProvider;
   AOnComplete: TCommitDetailCompleteEvent);
 var
   LThread: TCommitDetailThread;
+  LEmpty: TCommitDetail;
 begin
+  if AProvider = nil then
+  begin
+    if Assigned(AOnComplete) then
+    begin
+      LEmpty.Fetched := False;
+      AOnComplete(LEmpty);
+    end;
+    Exit;
+  end;
+
   LThread := TCommitDetailThread.Create(AProvider, ACommitHash, ARepoRoot,
     ARelativeFilePath, AOnComplete);
   LThread.Start;

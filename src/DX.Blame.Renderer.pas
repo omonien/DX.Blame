@@ -123,20 +123,11 @@ uses
   DX.Blame.Git.Types,
   DX.Blame.Cache,
   DX.Blame.Popup,
-  DX.Blame.CommitDetail;
+  DX.Blame.CommitDetail,
+  DX.Blame.Logging;
 
-{$IFDEF DEBUG}
 var
   GPaintDebugCount: Integer = 0;
-
-procedure DebugLog(const AMsg: string);
-var
-  LMsgServices: IOTAMessageServices;
-begin
-  if Supports(BorlandIDEServices, IOTAMessageServices, LMsgServices) then
-    LMsgServices.AddTitleMessage(AMsg);
-end;
-{$ENDIF}
 
 type
   /// <summary>Helper class for hover timer callback.</summary>
@@ -328,16 +319,14 @@ var
   LDist: Integer;
   i: Integer;
 begin
-  {$IFDEF DEBUG}
   if GPaintDebugCount < 20 then
   begin
     Inc(GPaintDebugCount);
-    DebugLog(Format('DX.Blame.Renderer: PaintLine #%d stage=%d before=%s enabled=%s line=%d curLine=%d',
+    LogDebug('Renderer', Format('PaintLine #%d stage=%d before=%s enabled=%s line=%d curLine=%d',
       [GPaintDebugCount, Ord(Stage), BoolToStr(BeforeEvent, True),
        BoolToStr(BlameSettings.Enabled, True),
        Context.LogicalLineNum, FCurrentLine]));
   end;
-  {$ENDIF}
 
   if (Stage <> plsEndPaint) or BeforeEvent then
     Exit;
@@ -380,13 +369,11 @@ begin
   // Look up blame data from cache
   if not BlameEngine.Cache.TryGet(LFileName, LBlameData) then
   begin
-    {$IFDEF DEBUG}
     if GPaintDebugCount < 20 then
     begin
       Inc(GPaintDebugCount);
-      DebugLog('DX.Blame.Renderer: cache miss for ' + LFileName);
+      LogDebug('Renderer', 'Cache miss for ' + LFileName);
     end;
-    {$ENDIF}
     Exit;
   end;
 
@@ -595,10 +582,8 @@ begin
     Exit;
   if not BlameSettings.Enabled then
     Exit;
-  {$IFDEF DEBUG}
-  DebugLog(Format('DX.Blame: DoAnnotationClick X=%d Y=%d trigger=%d',
+  LogDebug('Renderer', Format('DoAnnotationClick X=%d Y=%d trigger=%d',
     [X, Y, Ord(BlameSettings.PopupTrigger)]));
-  {$ENDIF}
   if BlameSettings.PopupTrigger = ptHover then
     Exit;
   if GAnnotationRowTop < 0 then

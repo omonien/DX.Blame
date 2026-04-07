@@ -20,6 +20,7 @@
   <a href="#installation">Installation</a> &middot;
   <a href="#usage">Usage</a> &middot;
   <a href="#configuration">Configuration</a> &middot;
+  <a href="#changelog">Changelog</a> &middot;
   <a href="#license">License</a>
 </p>
 
@@ -65,6 +66,7 @@ Works with **Git** and **Mercurial** repositories. Auto-detects the VCS in use.
 - Toggle blame via editor right-click context menu
 - Splash screen and About Box registration
 - Asynchronous blame engine &mdash; never blocks the IDE
+- Optional **debug logging** to the IDE Messages window (off by default for Release-built packages)
 
 ## Requirements
 
@@ -92,7 +94,7 @@ DX.Blame compiles from a single codebase on Delphi 12 and 13 using conditional c
 
 4. Install the package:
    - **Component &gt; Install Packages &gt; Add...**
-   - Navigate to `build\Win32\Debug\DX.Blame.bpl` (or the appropriate platform/config path)
+   - Navigate to `build\Win32\Debug\DX.Blame.bpl` (or `build\Win32\Release\...` if you built **Release**)
    - Click **OK**
 
 5. The plugin is now active. Open a file in a Git or Mercurial repository to see blame annotations.
@@ -102,10 +104,28 @@ DX.Blame compiles from a single codebase on Delphi 12 and 13 using conditional c
 Alternatively, build from the command line using the included PowerShell script:
 
 ```powershell
-.\build\DelphiBuildDPROJ.ps1 -Project .\src\DX.Blame.dproj
+.\build\DelphiBuildDPROJ.ps1 -ProjectFile .\src\DX.Blame.dproj
 ```
 
-This automatically detects the newest Delphi version on the system.
+This automatically detects the newest Delphi version on the system (defaults: **Debug**, **Win32**). For a Release build: add `-Config Release`. To build the test runner: use `-ProjectFile .\tests\DX.Blame.Tests.dproj`.
+
+### Running tests
+
+After building the test project, run DUnitX from the output folder (same **Config** / **Platform** as the build):
+
+```powershell
+.\build\Win32\Release\DX.Blame.Tests.exe -exit:Continue -consolemode:Quiet
+```
+
+For a **Debug** build, use `.\build\Win32\Debug\DX.Blame.Tests.exe` instead. All tests should pass before tagging a release.
+
+### Where the package (.bpl) is written
+
+The design-time package is linked into the IDE’s **Bpl** directory (see `DCC_BplOutput` in `DX.Blame.dproj`), not under `build\`. For example, with **Delphi 13 (37.0)** on Win32 you will typically get:
+
+`%PUBLIC%\Documents\Embarcadero\Studio\37.0\Bpl\DX.Blame370.bpl`
+
+Use that file when installing the package in the IDE or when attaching a binary to a GitHub release.
 
 ## Usage
 
@@ -135,29 +155,42 @@ Access settings via **Tools &gt; Options &gt; Third Party &gt; DX Blame**.
 |---------|-------------|---------|
 | Show Author | Display author name in annotations | On |
 | Date Format | Relative ("3 days ago") or absolute | Relative |
-| Max Author Length | Truncate long author names | 20 |
-| Annotation Color | Color for blame text (auto-derived from theme) | Auto |
+| Show Commit Summary | Include commit subject in the annotation text | Off |
+| Max Length | Maximum length of the annotation string (20&ndash;200) | 80 |
+| Annotation Color | Auto (theme-derived) or custom color | Auto |
 | Annotation Position | Caret-anchored or right-aligned in editor | Caret-anchored |
 | Popup Trigger | Hover over annotation or click on hash link | Hover |
 | Show Inline | Enable/disable inline annotations | On |
 | Show in Statusbar | Enable/disable statusbar blame | On |
 | VCS Preference | Auto / Git / Mercurial | Auto |
 | Hotkey | Keyboard shortcut for toggle | Ctrl+Alt+B |
+| Enable debug logging | Write diagnostic lines to IDE Messages | On in **Debug** builds, off in **Release** builds |
 
 Settings are stored in `%APPDATA%\DX.Blame\settings.ini`.
+
+## Changelog
+
+Release notes and version history: [CHANGELOG.md](CHANGELOG.md).
+
+### Versioning
+
+Version numbers are defined only in `src/DX.Blame.Version.pas` (`cDXBlameMajorVersion` … `cDXBlameBuild`). The string shown in the IDE (splash, about) comes from `DXBlameVersionString`, which is derived from those four values.
+
+The Delphi project files duplicate Win32 version metadata (`FileVersion` / `ProductVersion` in the `.dproj` files). After changing the numeric constants, run **`build/Sync-DXBlameVersion.ps1`** so the package and test projects stay aligned. Use `-WhatIf` to preview changes.
 
 ## Project Structure
 
 ```
 DX.Blame/
-  src/               Source code (31 units)
+  src/               Source code (33 units in the design-time package)
     DX.Blame.dpk     Design-time package
     DX.Blame.dproj   Project file
   res/               Resources (splash icon, logos)
-  build/             Build output and build script
+  build/             Build output, DelphiBuildDPROJ.ps1, Sync-DXBlameVersion.ps1
   tests/             DUnitX test project
   docs/              Documentation
   libs/              External dependencies (Git submodules)
+  CHANGELOG.md       Release notes
 ```
 
 ## License

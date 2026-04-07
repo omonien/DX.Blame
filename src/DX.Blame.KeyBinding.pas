@@ -62,7 +62,8 @@ implementation
 uses
   Vcl.Menus,
   DX.Blame.Settings,
-  DX.Blame.Renderer;
+  DX.Blame.Renderer,
+  DX.Blame.Logging;
 
 var
   GKeyBindingIndex: Integer = -1;
@@ -96,6 +97,7 @@ procedure TDXBlameKeyBinding.ToggleBlame(const Context: IOTAKeyContext;
 begin
   BlameSettings.Enabled := not BlameSettings.Enabled;
   BlameSettings.Save;
+  LogInfo('KeyBinding', 'Blame toggled to ' + BoolToStr(BlameSettings.Enabled, True));
   if Assigned(OnBlameToggled) then
     OnBlameToggled();
   InvalidateAllEditors;
