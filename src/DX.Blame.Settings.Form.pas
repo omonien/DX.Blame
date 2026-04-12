@@ -161,7 +161,8 @@ begin
   LSettings.ShowAuthor := CheckBoxShowAuthor.Checked;
   LSettings.DateFormat := TDXBlameDateFormat(ComboBoxDateFormat.ItemIndex);
   LSettings.ShowSummary := CheckBoxShowSummary.Checked;
-  LSettings.MaxLength := UpDownMaxLength.Position;
+  // Make sure we read the current value from the edit control through the associate
+  LSettings.MaxLength := StrToIntDef(EditMaxLength.Text, 80);
   LSettings.UseCustomColor := RadioButtonCustomColor.Checked;
   LSettings.CustomColor := FSelectedColor;
 
