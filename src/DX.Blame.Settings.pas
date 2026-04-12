@@ -57,6 +57,7 @@ type
     FShowInline: Boolean;
     FShowStatusbar: Boolean;
     FEnableDebugLogging: Boolean;
+    FSuppressPopupInDebug: Boolean;
   public
     constructor Create;
 
@@ -94,6 +95,8 @@ type
     property ShowStatusbar: Boolean read FShowStatusbar write FShowStatusbar;
     /// <summary>When True, runtime debug logs are emitted to IDE messages.</summary>
     property EnableDebugLogging: Boolean read FEnableDebugLogging write FEnableDebugLogging;
+    /// <summary>When True, hover/click popups are suppressed while the IDE debugger is active.</summary>
+    property SuppressPopupInDebug: Boolean read FSuppressPopupInDebug write FSuppressPopupInDebug;
   end;
 
 /// <summary>Returns the singleton TDXBlameSettings instance (lazy-initialized).</summary>
@@ -147,6 +150,7 @@ begin
   {$ELSE}
   FEnableDebugLogging := False;
   {$ENDIF}
+  FSuppressPopupInDebug := True;
 end;
 
 class function TDXBlameSettings.GetSettingsPath: string;
@@ -218,6 +222,7 @@ begin
     {$ELSE}
     FEnableDebugLogging := LIni.ReadBool('Debug', 'EnableDebugLogging', False);
     {$ENDIF}
+    FSuppressPopupInDebug := LIni.ReadBool('Debug', 'SuppressPopupInDebug', True);
   finally
     LIni.Free;
   end;
@@ -272,6 +277,7 @@ begin
     LIni.WriteBool('Display', 'ShowInline', FShowInline);
     LIni.WriteBool('Display', 'ShowStatusbar', FShowStatusbar);
     LIni.WriteBool('Debug', 'EnableDebugLogging', FEnableDebugLogging);
+    LIni.WriteBool('Debug', 'SuppressPopupInDebug', FSuppressPopupInDebug);
   finally
     LIni.Free;
   end;

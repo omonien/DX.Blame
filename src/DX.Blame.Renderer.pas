@@ -353,14 +353,6 @@ begin
   if not BlameSettings.ShowInline then
     Exit;
 
-  // Suppress annotations while debugger is running (F8 stepping etc.)
-  // The annotation following the caret is distracting during debugging.
-  if IsDebuggerRunning then
-  begin
-    HidePopup;
-    Exit;
-  end;
-
   // Store cell height for hit-testing in EditorMouseDown
   GCellHeight := Context.CellSize.cy;
 
@@ -604,6 +596,9 @@ begin
     Exit;
   if not BlameSettings.Enabled then
     Exit;
+  // Suppress popup while debugger is active (if configured)
+  if BlameSettings.SuppressPopupInDebug and IsDebuggerRunning then
+    Exit;
   LogDebug('Renderer', Format('DoAnnotationClick X=%d Y=%d trigger=%d',
     [X, Y, Ord(BlameSettings.PopupTrigger)]));
   if BlameSettings.PopupTrigger = ptHover then
@@ -696,6 +691,10 @@ begin
   if not BlameSettings.ShowInline then
     Exit;
   if FCurrentLine <= 0 then
+    Exit;
+
+  // Suppress popup while debugger is active (if configured)
+  if BlameSettings.SuppressPopupInDebug and IsDebuggerRunning then
     Exit;
 
   // After scroll-dismiss, suppress hover until mouse physically moves

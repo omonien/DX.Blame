@@ -63,6 +63,7 @@ type
     LabelHotkeyValue: TLabel;
     LabelHotkeyInfo: TLabel;
     CheckBoxEnableDebugLogging: TCheckBox;
+    CheckBoxSuppressPopupInDebug: TCheckBox;
     ButtonResetDefaults: TButton;
     ButtonOK: TButton;
     ButtonCancel: TButton;
@@ -141,6 +142,7 @@ begin
   CheckBoxShowInline.Checked := LSettings.ShowInline;
   CheckBoxShowStatusbar.Checked := LSettings.ShowStatusbar;
   CheckBoxEnableDebugLogging.Checked := LSettings.EnableDebugLogging;
+  CheckBoxSuppressPopupInDebug.Checked := LSettings.SuppressPopupInDebug;
 
   LabelHotkeyValue.Caption := LSettings.ToggleHotkey;
 
@@ -171,6 +173,7 @@ begin
   LSettings.ShowInline := CheckBoxShowInline.Checked;
   LSettings.ShowStatusbar := CheckBoxShowStatusbar.Checked;
   LSettings.EnableDebugLogging := CheckBoxEnableDebugLogging.Checked;
+  LSettings.SuppressPopupInDebug := CheckBoxSuppressPopupInDebug.Checked;
 
   LSettings.VCSPreference := TDXBlameVCSPreference(ComboBoxVCSPreference.ItemIndex);
 
