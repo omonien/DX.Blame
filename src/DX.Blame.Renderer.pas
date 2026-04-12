@@ -160,6 +160,7 @@ var
   GAnnotationStartX: Integer = 0;
   GAnnotationHashWidth: Integer = 0;
   GAnnotationLine: Integer = 0;
+  GAnnotationIsUncommitted: Boolean = False;
   GCellHeight: Integer = 0;
   GLastPaintEditor: TWinControl = nil;
 
@@ -293,6 +294,7 @@ procedure TDXBlameRenderer.BeginPaint(const Editor: TWinControl;
   const ForceFullRepaint: Boolean);
 begin
   GAnnotationRowTop := -1;
+  GAnnotationIsUncommitted := False;
   GCaretLinePaintedThisCycle := False;
 
   // Hide popup if editor changed (switched tabs)
@@ -485,6 +487,7 @@ begin
     GAnnotationRowTop := Rect.Top;
     GAnnotationStartX := LAnnotationX;
     GAnnotationLine := LLogicalLine;
+    GAnnotationIsUncommitted := (LLineIndex < 0);
     GCaretLinePaintedThisCycle := True;
 
     // Transparent background for annotation text
@@ -683,6 +686,7 @@ var
   LRelPath: string;
   LCursorScreenPos: TPoint;
   LMouseOverAnnotation: Boolean;
+  LUncommittedInfo: TBlameLineInfo;
 begin
   if BlameSettings.PopupTrigger <> ptHover then
     Exit;
@@ -744,8 +748,6 @@ begin
     Exit;
 
   LLineIndex := GAnnotationLine - 1;
-  if (LLineIndex < 0) or (LLineIndex >= Length(LBlameData.Lines)) then
-    Exit;
 
   LScreenPos := Editor.ClientToScreen(
     Point(GAnnotationStartX, GAnnotationRowTop + GCellHeight));
@@ -771,10 +773,25 @@ begin
   GHoverPopupLine := GAnnotationLine;
   GPopupAnchorRowTop := GAnnotationRowTop;
 
-  if GPopup.Visible then
-    GPopup.UpdateContent(LBlameData.Lines[LLineIndex], LRepoRoot, LRelPath)
+  if GAnnotationIsUncommitted then
+  begin
+    // New/uncommitted line — show uncommitted popup, not stale cache data
+    FillChar(LUncommittedInfo, SizeOf(TBlameLineInfo), 0);
+    LUncommittedInfo.IsUncommitted := True;
+    if GPopup.Visible then
+      GPopup.UpdateContent(LUncommittedInfo, LRepoRoot, LRelPath)
+    else
+      GPopup.ShowForHover(LUncommittedInfo, LScreenPos, LRepoRoot, LRelPath);
+  end
   else
-    GPopup.ShowForHover(LBlameData.Lines[LLineIndex], LScreenPos, LRepoRoot, LRelPath);
+  begin
+    if (LLineIndex < 0) or (LLineIndex >= Length(LBlameData.Lines)) then
+      Exit;
+    if GPopup.Visible then
+      GPopup.UpdateContent(LBlameData.Lines[LLineIndex], LRepoRoot, LRelPath)
+    else
+      GPopup.ShowForHover(LBlameData.Lines[LLineIndex], LScreenPos, LRepoRoot, LRelPath);
+  end;
 
   if GHoverCheckTimer <> nil then
     GHoverCheckTimer.Enabled := True;
