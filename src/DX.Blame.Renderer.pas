@@ -116,6 +116,7 @@ uses
   System.Math,
   Winapi.Messages,
   Vcl.ExtCtrls,
+  ToolsAPI,
   DX.Blame.Settings,
   DX.Blame.Formatter,
   DX.Blame.Engine,
@@ -134,6 +135,19 @@ type
   THoverTimerHelper = class
     procedure OnHoverCheck(Sender: TObject);
   end;
+
+/// <summary>Returns True if the IDE debugger is currently in a running/break state.</summary>
+function IsDebuggerRunning: Boolean;
+var
+  LDebugServices: IOTADebuggerServices;
+begin
+  Result := False;
+  if Supports(BorlandIDEServices, IOTADebuggerServices, LDebugServices) then
+  begin
+    if LDebugServices.CurrentDebugger <> nil then
+      Result := LDebugServices.CurrentDebugger.State in [dsRunnable, dsStopped, dsPaused];
+  end;
+end;
 
 var
   GRendererIndex: Integer = -1;
@@ -338,6 +352,14 @@ begin
   // (blame may still be globally enabled for statusbar display in Phase 13)
   if not BlameSettings.ShowInline then
     Exit;
+
+  // Suppress annotations while debugger is running (F8 stepping etc.)
+  // The annotation following the caret is distracting during debugging.
+  if IsDebuggerRunning then
+  begin
+    HidePopup;
+    Exit;
+  end;
 
   // Store cell height for hit-testing in EditorMouseDown
   GCellHeight := Context.CellSize.cy;
@@ -639,10 +661,19 @@ procedure TDXBlameRenderer.EditorMouseDown(const Editor: TWinControl;
 var
   LHandled: Boolean;
 begin
+  // In click-trigger mode: dismiss popup if click is outside the popup
+  // and outside the annotation area (the popup is WS_EX_NOACTIVATE so
+  // it never receives CM_DEACTIVATE from the IDE).
+  if (BlameSettings.PopupTrigger = ptClick) and (GPopup <> nil) and GPopup.Visible then
+  begin
+    LHandled := False;
+    DoAnnotationClick(Editor, Button, Shift, X, Y, LHandled);
+    if not LHandled then
+      HidePopup;
+    Exit;
+  end;
+
   // On Delphi 12 (no INTACodeEditorEvents370), handle clicks directly.
-  // LHandled is discarded; IDE will still process the click normally.
-  // On Delphi 13+, TDXBlameRendererD13 overrides this to a no-op and
-  // handles clicks via EditorMouseDown with var Handled instead.
   LHandled := False;
   DoAnnotationClick(Editor, Button, Shift, X, Y, LHandled);
 end;

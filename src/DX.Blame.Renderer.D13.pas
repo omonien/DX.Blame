@@ -93,6 +93,17 @@ procedure TDXBlameRendererD13.EditorMouseDown(const Editor: TWinControl;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer;
   var Handled: Boolean);
 begin
+  // In click-trigger mode: dismiss popup if click is outside the popup
+  // and outside the annotation area (the popup is WS_EX_NOACTIVATE so
+  // it never receives CM_DEACTIVATE from the IDE).
+  if (BlameSettings.PopupTrigger = ptClick) and (GPopup <> nil) and GPopup.Visible then
+  begin
+    DoAnnotationClick(Editor, Button, Shift, X, Y, Handled);
+    if not Handled then
+      HidePopup;
+    Exit;
+  end;
+
   DoAnnotationClick(Editor, Button, Shift, X, Y, Handled);
 end;
 
