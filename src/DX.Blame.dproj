@@ -82,6 +82,7 @@
         <DCCReference Include="DX.Blame.VCS.Discovery.pas"/>
         <DCCReference Include="DX.Blame.Cache.pas"/>
         <DCCReference Include="DX.Blame.Settings.pas"/>
+        <DCCReference Include="DX.Blame.Logging.pas"/>
         <DCCReference Include="DX.Blame.Formatter.pas"/>
         <DCCReference Include="DX.Blame.CommitDetail.pas"/>
         <DCCReference Include="DX.Blame.Popup.pas">

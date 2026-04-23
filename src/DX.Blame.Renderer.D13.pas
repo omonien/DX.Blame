@@ -68,6 +68,9 @@ function CreateBlameRenderer: INTACodeEditorEvents;
 
 implementation
 
+uses
+   DX.Blame.Settings;
+
 {$IF CompilerVersion >= 37.0}
 
 function CreateBlameRenderer: INTACodeEditorEvents;

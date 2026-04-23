@@ -32,7 +32,8 @@ uses
   Vcl.Graphics,
   Winapi.Windows,
   ToolsAPI,
-  ToolsAPI.Editor;
+  ToolsAPI.Editor,
+  DX.Blame.Popup;
 
 type
   /// <summary>
@@ -102,6 +103,9 @@ procedure InvalidateAllEditors;
 /// <summary>Cleans up the popup panel. Called during finalization.</summary>
 procedure CleanupPopup;
 
+/// <summary>Hides the popup and resets all popup/hover tracking state.</summary>
+procedure HidePopup;
+
 var
   /// <summary>
   /// Optional callback invoked when the editor caret moves to a new position.
@@ -109,6 +113,7 @@ var
   /// feature is not active.
   /// </summary>
   GOnCaretMoved: procedure(const AFileName: string; ALine: Integer);
+  GPopup: TDXBlamePopup = nil;
 
 implementation
 
@@ -116,14 +121,12 @@ uses
   System.Math,
   Winapi.Messages,
   Vcl.ExtCtrls,
-  ToolsAPI,
   DX.Blame.Settings,
   DX.Blame.Formatter,
   DX.Blame.Engine,
   DX.Blame.VCS.Types,
   DX.Blame.Git.Types,
   DX.Blame.Cache,
-  DX.Blame.Popup,
   DX.Blame.CommitDetail,
   DX.Blame.Logging;
 
@@ -144,14 +147,13 @@ begin
   Result := False;
   if Supports(BorlandIDEServices, IOTADebuggerServices, LDebugServices) then
   begin
-    if LDebugServices.CurrentDebugger <> nil then
-      Result := LDebugServices.CurrentDebugger.State in [dsRunnable, dsStopped, dsPaused];
+    if LDebugServices.CurrentProcess <> nil then
+      Result := LDebugServices.CurrentProcess.ProcessState in [psRunning, psStopped];
   end;
 end;
 
 var
   GRendererIndex: Integer = -1;
-  GPopup: TDXBlamePopup = nil;
 
   // Last-painted annotation position (only the caret line is annotated).
   // Updated in PaintLine, reset in BeginPaint. Used for hit-testing in
