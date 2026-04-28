@@ -70,6 +70,9 @@ implementation
 
 {$IF CompilerVersion >= 37.0}
 
+uses
+  DX.Blame.Settings;
+
 function CreateBlameRenderer: INTACodeEditorEvents;
 begin
   Result := TDXBlameRendererD13.Create;
