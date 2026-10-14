@@ -30,7 +30,8 @@ uses
   Winapi.Windows,
   DX.Blame.VCS.Types,
   DX.Blame.VCS.Provider,
-  DX.Blame.Cache;
+  DX.Blame.Cache,
+  DX.Blame.ModuleFiles;
 
 type
   TBlameThread = class;
@@ -51,6 +52,7 @@ type
     FDebounceTimers: TDictionary<string, TTimer>;
     FRetryTimers: TDictionary<string, TTimer>;
     FRetryFailed: TDictionary<string, Boolean>;
+    FRequestGuard: TBlameRequestGuard;
     FLock: TCriticalSection;
 
     procedure HandleBlameComplete(const AFileName: string; AData: TBlameData);
@@ -62,6 +64,8 @@ type
     procedure ClearAllTimers;
     /// <summary>Removes thread from active dictionary. Called by thread before FreeOnTerminate.</summary>
     procedure UnregisterThread(const AKey: string);
+    procedure MarkBlameRequested(const AFileName: string);
+    procedure UnmarkBlameRequested(const AFileName: string);
   public
     constructor Create;
     destructor Destroy; override;
@@ -72,6 +76,13 @@ type
     procedure RequestBlame(const AFileName: string);
     /// <summary>Starts a debounced blame request (used after file save).</summary>
     procedure RequestBlameDebounced(const AFileName: string);
+    /// <summary>
+    /// True after RequestBlame or RequestBlameDebounced has been called for
+    /// this file since the last CancelAndRemove or project switch.
+    /// The renderer uses this as a one-shot guard: a cache miss for a file
+    /// that was never requested calls RequestBlameDebounced once.
+    /// </summary>
+    function WasBlameRequested(const AFileName: string): Boolean;
     /// <summary>Cancels any pending blame and removes file from cache.</summary>
     procedure CancelAndRemove(const AFileName: string);
     /// <summary>Handles project switch: cancels all, clears cache, re-initializes.</summary>
@@ -213,6 +224,7 @@ begin
   FDebounceTimers := TDictionary<string, TTimer>.Create;
   FRetryTimers := TDictionary<string, TTimer>.Create;
   FRetryFailed := TDictionary<string, Boolean>.Create;
+  FRequestGuard := TBlameRequestGuard.Create;
   FFileRepoRoots := TDictionary<string, string>.Create;
   FLock := TCriticalSection.Create;
   FVCSAvailable := False;
@@ -228,6 +240,7 @@ begin
   FRetryTimers.Free;
   FDebounceTimers.Free;
   FActiveThreads.Free;
+  FRequestGuard.Free;
   FCache.Free;
   FLock.Free;
   inherited;
@@ -258,12 +271,53 @@ begin
   LogInfo('Engine', FProvider.GetDisplayName + ' repository detected at ' + FRepoRoot);
 end;
 
+procedure TBlameEngine.MarkBlameRequested(const AFileName: string);
+begin
+  if (AFileName = '') or (FRequestGuard = nil) then
+    Exit;
+  FLock.Enter;
+  try
+    FRequestGuard.Mark(AFileName);
+  finally
+    FLock.Leave;
+  end;
+end;
+
+procedure TBlameEngine.UnmarkBlameRequested(const AFileName: string);
+begin
+  if (AFileName = '') or (FRequestGuard = nil) then
+    Exit;
+  FLock.Enter;
+  try
+    FRequestGuard.Remove(AFileName);
+  finally
+    FLock.Leave;
+  end;
+end;
+
+function TBlameEngine.WasBlameRequested(const AFileName: string): Boolean;
+begin
+  Result := False;
+  if (AFileName = '') or (FRequestGuard = nil) then
+    Exit;
+  FLock.Enter;
+  try
+    Result := FRequestGuard.Contains(AFileName);
+  finally
+    FLock.Leave;
+  end;
+end;
+
 procedure TBlameEngine.RequestBlame(const AFileName: string);
 var
   LKey: string;
   LThread: TBlameThread;
   LExisting: TBlameThread;
 begin
+  // Record the request before any early exit. The renderer paint loop checks
+  // WasBlameRequested on a cache miss and must not call back on every line.
+  MarkBlameRequested(AFileName);
+
   // Lazy initialization: during IDE startup, Register may be called before
   // any project is active, leaving FVCSAvailable = False. Try from file path.
   if not FVCSAvailable and (FRepoRoot = '') then
@@ -313,6 +367,10 @@ var
   LKey: string;
   LTimer: TTimer;
 begin
+  // Mark before the VCS check so a cache-miss paint calls this only once,
+  // even when blame cannot start yet.
+  MarkBlameRequested(AFileName);
+
   if not FVCSAvailable then
     Exit;
 
@@ -398,6 +456,7 @@ begin
   end;
 
   FCache.Invalidate(AFileName);
+  UnmarkBlameRequested(AFileName);
 end;
 
 procedure TBlameEngine.OnProjectSwitch(const ANewProjectPath: string);
@@ -410,6 +469,8 @@ begin
   FLock.Enter;
   try
     FFileRepoRoots.Clear;
+    if FRequestGuard <> nil then
+      FRequestGuard.Clear;
   finally
     FLock.Leave;
   end;

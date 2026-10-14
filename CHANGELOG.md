@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+
+- C++ header files that share an editor tab with the `.cpp` now get blame annotations. Opening a module requests blame for every module source file, save re-blames each of those files, and a one-shot renderer fallback covers a header the IDE did not name on open (fixes #13). Header enumeration uses `IOTAModule.ModuleFileCount` and `ModuleFileEditors`, which exist in Delphi 12 and Delphi 13. The Delphi 13-only renderer (`INTACodeEditorEvents370`) is unchanged.
+
 ## [1.4.0] - 2026-04-07
 
 ### Added

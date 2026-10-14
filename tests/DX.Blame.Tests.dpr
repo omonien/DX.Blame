@@ -29,7 +29,8 @@ uses
   DX.Blame.Tests.Settings in 'DX.Blame.Tests.Settings.pas',
   DX.Blame.Tests.Formatter in 'DX.Blame.Tests.Formatter.pas',
   DX.Blame.Tests.CommitDetail in 'DX.Blame.Tests.CommitDetail.pas',
-  DX.Blame.Tests.DiffFormatter in 'DX.Blame.Tests.DiffFormatter.pas';
+  DX.Blame.Tests.DiffFormatter in 'DX.Blame.Tests.DiffFormatter.pas',
+  DX.Blame.Tests.ModuleFiles in 'DX.Blame.Tests.ModuleFiles.pas';
 
 var
   LRunner: ITestRunner;

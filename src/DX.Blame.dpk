@@ -66,6 +66,7 @@ contains
   DX.Blame.Settings.Frame in 'DX.Blame.Settings.Frame.pas' {FrameDXBlameSettings: TFrame},
   DX.Blame.Settings.Options in 'DX.Blame.Settings.Options.pas',
   DX.Blame.Settings.Form in 'DX.Blame.Settings.Form.pas' {FormDXBlameSettings},
+  DX.Blame.ModuleFiles in 'DX.Blame.ModuleFiles.pas',
   DX.Blame.Engine in 'DX.Blame.Engine.pas',
   DX.Blame.IDE.Notifier in 'DX.Blame.IDE.Notifier.pas',
   DX.Blame.Registration in 'DX.Blame.Registration.pas';

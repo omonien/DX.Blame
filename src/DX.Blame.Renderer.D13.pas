@@ -13,6 +13,9 @@
 ///
 /// This entire unit is compiled only when CompilerVersion >= 37.0.
 /// On Delphi 12, Registration.pas instantiates TDXBlameRenderer directly.
+/// Cache-miss blame for a second module file (a C++ header in the same
+/// editor tab) lives in the inherited PaintLine, so Delphi 12 and 13 share
+/// that path. This unit does not add a separate header lookup.
 /// </remarks>
 ///
 /// <copyright>

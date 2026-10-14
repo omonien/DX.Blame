@@ -107,6 +107,7 @@
             <Form>FormDXBlameSettings</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="DX.Blame.ModuleFiles.pas"/>
         <DCCReference Include="DX.Blame.Engine.pas"/>
         <DCCReference Include="DX.Blame.IDE.Notifier.pas"/>
         <DCCReference Include="DX.Blame.Registration.pas"/>
