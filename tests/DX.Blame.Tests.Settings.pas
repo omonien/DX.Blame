@@ -73,8 +73,10 @@ begin
   FTempDir := TPath.Combine(TPath.GetTempPath, 'DXBlameTest_' + TGUID.NewGuid.ToString);
   ForceDirectories(FTempDir);
   FTempIniPath := TPath.Combine(FTempDir, 'settings.ini');
-  // Create a fresh settings object without loading from real INI
+  // The constructor loads the user's real INI file. Reset to the built-in
+  // defaults so tests are independent of settings saved on this machine.
   FSettings := TDXBlameSettings.Create;
+  FSettings.ResetToDefaults;
 end;
 
 procedure TSettingsTests.TearDown;
