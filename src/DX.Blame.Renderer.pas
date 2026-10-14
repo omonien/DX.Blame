@@ -640,7 +640,7 @@ begin
 
   LScreenPos := Editor.ClientToScreen(Point(X, Y));
 
-  LRepoRoot := BlameEngine.RepoRoot;
+  LRepoRoot := BlameEngine.RepoRootForFile(LFileName);
   if LRepoRoot <> '' then
     LRelPath := ExtractRelativePath(
       IncludeTrailingPathDelimiter(LRepoRoot), LFileName)
@@ -759,7 +759,7 @@ begin
   LScreenPos := Editor.ClientToScreen(
     Point(GAnnotationStartX, GAnnotationRowTop + GCellHeight));
 
-  LRepoRoot := BlameEngine.RepoRoot;
+  LRepoRoot := BlameEngine.RepoRootForFile(FCurrentFileName);
   if LRepoRoot <> '' then
     LRelPath := ExtractRelativePath(
       IncludeTrailingPathDelimiter(LRepoRoot), FCurrentFileName)

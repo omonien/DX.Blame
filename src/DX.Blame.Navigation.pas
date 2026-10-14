@@ -263,7 +263,7 @@ begin
   if not IsRevisionAvailable(LLineInfo.CommitHash) then
     Exit;
 
-  NavigateToRevision(LFileName, LLineInfo.CommitHash, BlameEngine.RepoRoot,
+  NavigateToRevision(LFileName, LLineInfo.CommitHash, BlameEngine.RepoRootForFile(LFileName),
     LLineInfo.FinalLine);
 end;
 

@@ -36,6 +36,8 @@ type
     [Test]
     procedure TestFindRepoRootFromNonRepo;
     [Test]
+    procedure TestFindRepoRootInSubmodule;
+    [Test]
     procedure TestClearDiscoveryCacheResets;
   end;
 
@@ -43,6 +45,7 @@ implementation
 
 uses
   System.SysUtils,
+  System.IOUtils,
   DX.Blame.Git.Discovery;
 
 { TGitDiscoveryTests }
@@ -88,6 +91,37 @@ var
 begin
   LRoot := FindGitRepoRoot('C:\Windows');
   Assert.IsEmpty(LRoot, 'C:\Windows should not be inside a git repo');
+end;
+
+procedure TGitDiscoveryTests.TestFindRepoRootInSubmodule;
+var
+  LBase: string;
+  LOuter: string;
+  LSub: string;
+  LSubSrc: string;
+  LRoot: string;
+begin
+  // Issue #14: a submodule has a .git FILE, not a folder. A file inside the
+  // submodule must resolve to the submodule root, not to the superproject.
+  LBase := TPath.Combine(TPath.GetTempPath, 'DXBlameTest_' + TPath.GetGUIDFileName);
+  LOuter := TPath.Combine(LBase, 'outer');
+  LSub := TPath.Combine(LOuter, 'sub');
+  LSubSrc := TPath.Combine(LSub, 'src');
+  TDirectory.CreateDirectory(TPath.Combine(LOuter, '.git'));
+  TDirectory.CreateDirectory(LSubSrc);
+  TFile.WriteAllText(TPath.Combine(LSub, '.git'), 'gitdir: ../.git/modules/sub');
+  try
+    LRoot := FindGitRepoRoot(TPath.Combine(LSubSrc, 'Unit1.pas'));
+    Assert.AreEqual(LSub, ExcludeTrailingPathDelimiter(LRoot),
+      'File in submodule should resolve to the submodule root');
+
+    ClearDiscoveryCache;
+    LRoot := FindGitRepoRoot(LOuter);
+    Assert.AreEqual(LOuter, ExcludeTrailingPathDelimiter(LRoot),
+      'Superproject should still resolve to its own root');
+  finally
+    TDirectory.Delete(LBase, True);
+  end;
 end;
 
 procedure TGitDiscoveryTests.TestClearDiscoveryCacheResets;

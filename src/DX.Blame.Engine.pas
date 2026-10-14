@@ -44,6 +44,7 @@ type
     FCache: TBlameCache;
     FProvider: IVCSProvider;
     FRepoRoot: string;
+    FFileRepoRoots: TDictionary<string, string>;
     FVCSAvailable: Boolean;
     FVCSNotified: Boolean;
     FActiveThreads: TDictionary<string, TBlameThread>;
@@ -75,6 +76,12 @@ type
     procedure CancelAndRemove(const AFileName: string);
     /// <summary>Handles project switch: cancels all, clears cache, re-initializes.</summary>
     procedure OnProjectSwitch(const ANewProjectPath: string);
+    /// <summary>
+    /// Returns the root of the repository that actually contains AFileName.
+    /// For files in a git submodule or nested repository this is the
+    /// submodule's own root, otherwise it equals RepoRoot.
+    /// </summary>
+    function RepoRootForFile(const AFileName: string): string;
 
     /// <summary>Thread-safe blame data cache.</summary>
     property Cache: TBlameCache read FCache;
@@ -206,6 +213,7 @@ begin
   FDebounceTimers := TDictionary<string, TTimer>.Create;
   FRetryTimers := TDictionary<string, TTimer>.Create;
   FRetryFailed := TDictionary<string, Boolean>.Create;
+  FFileRepoRoots := TDictionary<string, string>.Create;
   FLock := TCriticalSection.Create;
   FVCSAvailable := False;
   FVCSNotified := False;
@@ -216,6 +224,7 @@ begin
   CancelAllThreads;
   ClearAllTimers;
   FRetryFailed.Free;
+  FFileRepoRoots.Free;
   FRetryTimers.Free;
   FDebounceTimers.Free;
   FActiveThreads.Free;
@@ -287,7 +296,7 @@ begin
     FLock.Leave;
   end;
 
-  LThread := TBlameThread.Create(Self, FProvider, FRepoRoot, AFileName);
+  LThread := TBlameThread.Create(Self, FProvider, RepoRootForFile(AFileName), AFileName);
 
   FLock.Enter;
   try
@@ -398,6 +407,12 @@ begin
   FCache.Clear;
   CommitDetailCache.Clear;
   FRetryFailed.Clear;
+  FLock.Enter;
+  try
+    FFileRepoRoots.Clear;
+  finally
+    FLock.Leave;
+  end;
   FProvider := nil;
   // Clear both discovery caches to ensure fresh detection on project switch
   DX.Blame.Git.Discovery.ClearDiscoveryCache;
@@ -528,6 +543,46 @@ begin
 
   if LKey <> '' then
     RequestBlame(LKey);
+end;
+
+function TBlameEngine.RepoRootForFile(const AFileName: string): string;
+var
+  LDir: string;
+  LKey: string;
+begin
+  Result := FRepoRoot;
+  if (FProvider = nil) or (AFileName = '') then
+    Exit;
+
+  LDir := ExtractFileDir(AFileName);
+  if LDir = '' then
+    Exit;
+  LKey := LowerCase(LDir);
+
+  FLock.Enter;
+  try
+    if FFileRepoRoots.TryGetValue(LKey, Result) then
+      Exit;
+  finally
+    FLock.Leave;
+  end;
+
+  // Resolve the innermost repository containing the file's directory,
+  // e.g. a git submodule (issue #14). Fall back to the project root.
+  Result := FProvider.FindRepoRoot(LDir);
+  if Result = '' then
+    Result := FRepoRoot
+  else if not SameText(ExcludeTrailingPathDelimiter(Result),
+    ExcludeTrailingPathDelimiter(FRepoRoot)) then
+    LogDebug('Engine', 'Using nested repository root ' + Result + ' for ' +
+      ExtractFileName(AFileName));
+
+  FLock.Enter;
+  try
+    FFileRepoRoots.AddOrSetValue(LKey, Result);
+  finally
+    FLock.Leave;
+  end;
 end;
 
 function TBlameEngine.IsSourceFile(const AFileName: string): Boolean;
