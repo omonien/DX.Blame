@@ -297,7 +297,7 @@ var
 begin
   LScreenPos := FStatusBar.ClientToScreen(Point(X, 0));
 
-  LRepoRoot := BlameEngine.RepoRoot;
+  LRepoRoot := BlameEngine.RepoRootForFile(FFileName);
   if LRepoRoot <> '' then
     LRelPath := ExtractRelativePath(
       IncludeTrailingPathDelimiter(LRepoRoot), FFileName)

@@ -27,8 +27,10 @@ function FindGitExecutable: string;
 
 /// <summary>
 /// Finds the git repository root for the given path by walking parent
-/// directories for a .git folder, then verifying with git rev-parse.
-/// Returns an empty string if the path is not inside a git repository.
+/// directories for a .git entry, then verifying with git rev-parse.
+/// The .git entry may be a folder (regular repository) or a file
+/// (submodule or linked worktree), so the innermost containing
+/// repository is returned. Returns an empty string if the path is not inside a git repository.
 /// </summary>
 function FindGitRepoRoot(const APath: string): string;
 
@@ -156,7 +158,10 @@ begin
   while LDir <> '' do
   begin
     LGitDir := TPath.Combine(LDir, '.git');
-    if TDirectory.Exists(LGitDir) then
+    // A submodule or linked worktree has a .git file instead of a folder.
+    // Accept both so that files in a submodule resolve to the submodule's
+    // own root and not to the superproject (issue #14).
+    if TDirectory.Exists(LGitDir) or TFile.Exists(LGitDir) then
     begin
       // Verify with git rev-parse to confirm valid repo, but use LDir as
       // the root path. git rev-parse --show-toplevel may return a UNC path
