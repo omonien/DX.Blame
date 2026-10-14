@@ -39,17 +39,18 @@ function CollectBlameFileNames(const ANotifiedFileName: string;
 /// Contains is case-insensitive. Mark is idempotent. An empty name is ignored
 /// so a paint loop cannot lock the guard on a blank buffer.
 /// </summary>
-TBlameRequestGuard = class
-private
-  FNames: TDictionary<string, Boolean>;
-public
-  constructor Create;
-  destructor Destroy; override;
-  procedure Mark(const AFileName: string);
-  function Contains(const AFileName: string): Boolean;
-  procedure Remove(const AFileName: string);
-  procedure Clear;
-end;
+type
+  TBlameRequestGuard = class
+  private
+    FNames: TDictionary<string, Boolean>;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Mark(const AFileName: string);
+    function Contains(const AFileName: string): Boolean;
+    procedure Remove(const AFileName: string);
+    procedure Clear;
+  end;
 
 implementation
 
