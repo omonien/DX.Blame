@@ -76,13 +76,25 @@ end;
 
 procedure TGitDiscoveryTests.TestFindRepoRootFromProjectDir;
 var
-  LExeDir: string;
+  LBase: string;
+  LRepo: string;
+  LProjectDir: string;
   LRoot: string;
 begin
-  // The test exe is built into build\Win64\Debug, which is inside the repo
-  LExeDir := ExtractFileDir(ParamStr(0));
-  LRoot := FindGitRepoRoot(LExeDir);
-  Assert.IsNotEmpty(LRoot, 'Should find repo root from build directory: ' + LExeDir);
+  // Build a temporary repo layout instead of relying on the test exe being
+  // located inside the source repository (it may be built elsewhere).
+  LBase := TPath.Combine(TPath.GetTempPath, 'DXBlameTest_' + TPath.GetGUIDFileName);
+  LRepo := TPath.Combine(LBase, 'repo');
+  LProjectDir := TPath.Combine(TPath.Combine(TPath.Combine(LRepo, 'build'), 'Win64'), 'Debug');
+  TDirectory.CreateDirectory(TPath.Combine(LRepo, '.git'));
+  TDirectory.CreateDirectory(LProjectDir);
+  try
+    LRoot := FindGitRepoRoot(LProjectDir);
+    Assert.AreEqual(LRepo, ExcludeTrailingPathDelimiter(LRoot),
+      'Should find repo root from nested project directory: ' + LProjectDir);
+  finally
+    TDirectory.Delete(LBase, True);
+  end;
 end;
 
 procedure TGitDiscoveryTests.TestFindRepoRootFromNonRepo;
