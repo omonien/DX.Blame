@@ -389,10 +389,23 @@ begin
   // Store current file name for click handling
   FCurrentFileName := LFileName;
 
-  // Look up blame data from cache
+  // Look up blame data from cache.
+  // Shared by Delphi 12 (this class) and Delphi 13 (TDXBlameRendererD13
+  // inherits PaintLine and does not override it). No Delphi 13-only
+  // ToolsAPI member is used here. Context.EditView.Buffer.FileName is
+  // IOTAEditBuffer.FileName, which exists in both versions.
   if not BlameEngine.Cache.TryGet(LFileName, LBlameData) then
   begin
-    if GPaintDebugCount < 20 then
+    // ofnFileOpened may have named only the .cpp. The header buffer in the
+    // same editor tab then misses the cache. Request it once. The guard is
+    // set inside RequestBlameDebounced before that call returns, so later
+    // paint cycles do not call it again.
+    if not BlameEngine.WasBlameRequested(LFileName) then
+    begin
+      LogDebug('Renderer', 'Cache miss, requesting blame once for ' + LFileName);
+      BlameEngine.RequestBlameDebounced(LFileName);
+    end
+    else if GPaintDebugCount < 20 then
     begin
       Inc(GPaintDebugCount);
       LogDebug('Renderer', 'Cache miss for ' + LFileName);

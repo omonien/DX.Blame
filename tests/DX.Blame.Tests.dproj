@@ -65,6 +65,7 @@
         <DCCReference Include="DX.Blame.Tests.Formatter.pas"/>
         <DCCReference Include="DX.Blame.Tests.CommitDetail.pas"/>
         <DCCReference Include="DX.Blame.Tests.DiffFormatter.pas"/>
+        <DCCReference Include="DX.Blame.Tests.ModuleFiles.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
